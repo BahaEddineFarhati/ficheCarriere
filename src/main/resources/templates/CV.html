@@ -1,0 +1,275 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="author" content="colorlib.com">
+    <link href="https://fonts.googleapis.com/css?family=Poppins"
+          rel="stylesheet"/>
+    <title
+            th:text="${employeeDetails.fName} + ' ' + ${employeeDetails.lName}"></title>
+    <link rel="stylesheet" th:href="@{/FicheCarriere/assets/css/cv.css}">
+    <link rel="stylesheet" th:href="@{/FicheCarriere/assets/css/main.css}">
+    <link rel="stylesheet" th:href="@{/FicheCarriere/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/FicheCarriere/assets/css/styleContent.css}">
+    <link rel="stylesheet" th:href="@{/FicheCarriere/assets/css/boxicons.min.css}">
+
+
+    <style>
+        .me-img {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 250px; /* Ajustez la largeur selon vos besoins */
+            height: 250px; /* Ajustez la hauteur selon vos besoins */
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .me-img img {
+            width: 100%; /* Ajustez la largeur de l'image agrandie */
+            height: auto;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<nav
+        class="navbar navbar-expand-md navbar-light bg-white shadow-sm  fixed-top">
+    <div class="container">
+        <div class="logo">
+            <img th:src="@{/assets/img/image_news_get.png}" alt="Logo"
+                 style="max-width: 200px; max-height: 200px;"/>
+        </div>
+        <div class="logo">
+            <a th:href="@{/listEmployees}"> <img
+                    th:src="@{/assets/img/logo.png}" alt="Logo"
+                    style="max-width: 200px; max-height: 200px;"/>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="wrapper clearfix">
+    <div class="left">
+        <div class="name-hero">
+            <div class="me-img">
+                <img th:src="@{${imagePath}}" alt="Your Name"/>
+            </div>
+            <br>
+            <div class="name-text">
+
+                <h1>
+                    <em th:text="${employeeDetails.fName} "></em> <em
+                        th:text="${employeeDetails.lName}"></em>
+                </h1>
+
+                <div th:each="detail, rowStat : ${employeeDetails.contactDetails}">
+                    <h5>Coordonnées:</h5>
+                    <div class="row">
+                        <div class="col-sm-12 ">
+                            <b>Adresse : </b><a th:text="${detail.street} "></a> <a
+                                th:text="${detail.city} "></a>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-12
+             ">
+                            <b>Téléphone : </b> <a th:text="${detail.phoneNumber} "></a>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-12
+             ">
+                            <b>Email : </b> <a th:text="${detail.email} "></a>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-12 ">
+                        <b>Date de naissance : </b><a
+                            th:text="${employeeDetails.birthDate} "></a>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+
+                    <div class="col-sm-12
+             ">
+                        <b>Date de prise de fonction : </b> <a
+                            th:text="${employeeDetails.hireDate} "></a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <div class="right">
+        <div class="inner">
+            <section class="text-center "
+                     th:if="${employeeDetails.actualDepartment == 'null'}">
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualPosition} "></a> (Détaché(e))
+                </h1>
+                <p>
+                    <b>Echelon: </b>2ans
+                </p>
+            </section>
+            <section class="text-center "
+                     th:if="${employeeDetails.actualDepartment != 'null'}">
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualPosition} "></a>
+                </h1>
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualDepartment} "></a>
+                </h1>
+            </section>
+            <div class="container" >
+                <h1></h1>
+
+                <h5 th:text="${employeeDetails.formationsList[0].getLevel()}"></h5>
+                <p th:text="${employeeDetails.formationsList[0].getDiploma()}"></p>
+
+
+                <button>Voir plus</button>
+
+            </div>
+
+            <section id="Details" class="why-us section-bg">
+                <div>
+                    <div class="accordion-list">
+                        <div class="row">
+                            <div class="col-xl-12">
+
+                                <ul>
+                                    <li><a data-bs-toggle="collapse" class="collapse"
+                                           data-bs-target="#accordion-list-1">Formations<i
+                                            class="bx bx-chevron-down icon-show"></i><i
+                                            class="bx bx-chevron-up icon-close"></i></a>
+                                        <div id="accordion-list-1" class="collapse show"
+                                             data-bs-parent=".accordion-list">
+                                            <th:block
+                                                    th:each="formation, rowStat : ${employeeDetails.formationsList}">
+                                                <p>
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <h6 class="mb-0">
+                                                            <a th:text="${formation.level} "></a>
+                                                        </h6>
+                                                    </div>
+                                                    <div class="col-sm-9 text-secondary">
+                                                        <a th:text="${formation.diploma} "></a>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                </p>
+                                            </th:block>
+                                        </div>
+                                    </li>
+
+                                    <li><a data-bs-toggle="collapse"
+                                           data-bs-target="#accordion-list-2" class="collapsed">Fonctions<i
+                                            class="bx bx-chevron-down icon-show"></i><i
+                                            class="bx bx-chevron-up icon-close"></i></a>
+                                        <div id="accordion-list-2" class="collapse"
+                                             data-bs-parent=".accordion-list">
+                                            <th:block
+                                                    th:each="function, rowStat : ${employeeDetails.functionsList}">
+                                                <p>
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <h6 class="mb-0" th:text="${function.date} "></h6>
+                                                    </div>
+                                                    <div class="col-sm-5 text-secondary">
+                                                        <a th:text="${function.functionName} "></a>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p>
+                                                            <b><a th:text="${function.department} "></a><br>
+                                                            </b><a th:text="${function.service} "></a>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                </p>
+                                            </th:block>
+                                        </div>
+                                    </li>
+
+                                    <li><a data-bs-toggle="collapse"
+                                           data-bs-target="#accordion-list-3" class="collapsed">Grades<i
+                                            class="bx bx-chevron-down icon-show"></i><i
+                                            class="bx bx-chevron-up icon-close"></i></a>
+                                        <div id="accordion-list-3" class="collapse"
+                                             data-bs-parent=".accordion-list">
+
+                                            <th:block
+                                                    th:each="position, rowStat : ${employeeDetails.positionsList}">
+                                                <p>
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <h6 class="mb-0" th:text="${position.date} "></h6>
+                                                    </div>
+                                                    <div class="col-sm-5 text-secondary">
+                                                        <a th:text="${position.functionName} "></a>
+
+                                                        <p>
+                                                            <b>Promotion: </b><a
+                                                                th:text="${position.promotionType} "></a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p>
+                                                            <b><a th:text="${position.department} "></a><br>
+                                                            </b><a th:text="${position.service} "></a>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <hr>
+
+                                                </p>
+                                            </th:block>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <h6 class="mb-0" th:text="${employeeDetails.hireDate} "></h6>
+                                                </div>
+                                                <div class="col-sm-5 text-secondary">
+                                                    <a th:text="${employeeDetails.hireGrade} "></a>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </li>
+
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+
+</body>
+</html>
+
+

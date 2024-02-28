@@ -1,0 +1,26 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/assets/css/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+</head>
+<body>
+<nav
+        class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed-top ">
+    <div class="container">
+        <div class="logo">
+            <img th:src="@{/assets/img/image_news_get.png}" alt="Logo"
+                 style="max-width: 200px; max-height: 200px;"/>
+        </div>
+        <div class="logo">
+            <a th:href="@{/listEmployees}"> <img
+                    th:src="@{/assets/img/logo.png}" alt="Logo"
+                    style="max-width: 200px; max-height: 200px;"/>
+            </a>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

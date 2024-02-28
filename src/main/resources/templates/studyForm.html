@@ -1,0 +1,452 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${employeeDetails.fName} + ' ' + ${employeeDetails.lName}"></title>
+    <link rel="stylesheet" type="text/css" href="/FicheCarriere/assets/css/cv.css"/>
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/styleContent.css">
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/boxicons.min.css">
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/css/all.min.css">
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/bootstrap.min.css">
+
+
+
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <style>
+        body {
+            padding-top: 30px; /* Adjust this value based on the height of your navbar */
+        }
+
+        .wrapper {
+            margin-top: 30px; /* Same value as body padding-top */
+        }
+    </style>
+</head>
+<body>
+<nav
+        class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed-top ">
+    <div class="container">
+        <div class="logo">
+            <img th:src="@{/assets/img/image_news_get.png}" alt="Logo"
+                 style="max-width: 200px; max-height: 200px;"/>
+        </div>
+        <div class="logo">
+            <a th:href="@{/listEmployees}"> <img
+                    th:src="@{/assets/img/logo.png}" alt="Logo"
+                    style="max-width: 200px; max-height: 200px;"/>
+            </a>
+            <a href="#" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </div>
+</nav>
+
+<div class="wrapper clearfix">
+
+    <div class="left">
+        <div class="name-hero">
+            <div class="me-img">
+                <img th:src="@{${imagePath}}" alt="Your Name"/>
+            </div>
+            <div class="name-text">
+
+                <h1><em th:text="${employeeDetails.getfName()}"></em> <em th:text="${employeeDetails.getlName()}"></em>
+                </h1>
+                <br>
+                <p><b>Email : </b> <a th:text="${employeeDetails.getContactDetails().getEmail()} "></a></p>
+                <p><b>Téléphone : </b> <a th:text="${employeeDetails.getContactDetails().getPhoneNumber()} "></a></p>
+
+                <p><b>Date de naissance : </b><a
+                        th:text="${employeeDetails.getBirthDate()} "></a></p>
+                <p><b>Date de prise de fonction : </b> <a
+                        th:text="${employeeDetails.getHireDate()} "></a></p>
+                <p><b>Adresse : </b><a th:text="${employeeDetails.getContactDetails().getStreet()} "></a> <a
+                        th:text="${employeeDetails.getContactDetails().getCity()} "></a></p>
+
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="right">
+        <div class="inner">
+            <section class="text-center "
+                     th:if="${employeeDetails.actualDepartment == 'null'}">
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualPosition} "></a> (Détaché(e))
+                </h1>
+            </section>
+            <section class="text-center "
+                     th:if="${employeeDetails.actualDepartment != 'null'}">
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualPosition} "></a>
+                </h1>
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualDepartment} "></a>
+                </h1>
+            </section>
+            <!-- **********************************************************************************************PUBLICATIONS***************************************************************************-->
+            <div class="card">
+                <h5 class="card-header">Publications</h5>
+                <div class="card-body">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#addPubModal"
+                            class="btn btn-primary float-right">Ajouter publication
+                    </button>
+                    <div class="container mt-5" th:if="${!publications.isEmpty()}">
+                        <table class="table">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Date</th>
+                                <th>Lien</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="publication: ${publications}">
+                                <td th:text="${publication.publicationName}"></td>
+                                <td th:text="${publication.publicationDate}"></td>
+                                <td >
+                                    <a th:if="${publication.publicationLink != '' }" th:href="${publication.publicationLink}" target="_blank">Voir la publication</a>
+                                </td>
+
+
+                                <td>
+                                    <button type="button" class="btn btn-outline-warning"
+                                            th:pubName="${publication.getPublicationName()}"
+                                            th:pubYear="${publication.getPublicationDate()}"
+                                            th:pubLink="${publication.getPublicationLink()}"
+                                            th:id="${publication.getId()}"
+                                            th:employeeId="${publication.getEmployeeId()}"
+                                            onclick="openEditModal(this)"><i class="fas fa-edit"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-danger"
+                                            th:id="${publication.getId()}"
+                                            th:data="${publication.getEmployeeId()}"
+                                            onclick="deletePublication(this)"><i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="container mt-5" th:if="${publications == null or publications.size() == 0}">
+                        <p>Pas de publications.</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal fade" id="addPubModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ajouter une publication</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <form action="/FicheCarriere/study/insertPublication" method="post" th:object="${publicationObject}">
+                                <input type="hidden" th:field="*{employeeId}" th:value="${employeeDetails.getId()}"/>
+                                <label for="name" class="form-check-label">Nom de la publication:</label>
+                                <input type="text" maxlength="50" class="form-control" id="name"
+                                       th:field="*{publicationName}" required/>
+                                <br/>
+
+                                <label for="publicationDate" class="form-label">Date de la publication: </label>
+                                <input type="date" class="form-control" id="publicationDate" th:field="*{publicationDate}" required/>
+
+
+                                <br/>
+                                <label for="publicationLink" class="form-label">Lien de la publication: </label>
+                                <input type="text" maxlength="100" class="form-control" id="publicationLink"
+                                       th:field="*{publicationLink}" />
+                                <br/>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="editPubModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier publication</h5>
+                        </div>
+                        <div class="modal-body">
+
+                            <input type="hidden" id="id"/>
+                            <label for="editPublicationName" class="form-check-label">Nom de la publication:</label>
+                            <input type="text" class="form-control" id="editPublicationName" maxlength="50" required/>
+                            <br/>
+
+                            <label for="editPublicationDate" class="form-label">Date de la publication: </label>
+                            <input type="date" class="form-control" id="editPublicationDate"  required/>
+
+
+                            <br/>
+                            <label for="editPublicationLink" class="form-label">Lien de la publication: </label>
+                            <input type="text" maxlength="100" class="form-control" id="editPublicationLink"
+                            />
+                            <br/>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button class="btn btn-outline-info" onclick="saveData()">Sauvegarder</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- **********************************************************************************************CONFERENCES***************************************************************************-->
+            </br>
+            <div class="card">
+                <h5 class="card-header">Conference</h5>
+                <div class="card-body">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#addConfModal"
+                            class="btn btn-primary float-right">Ajouter Conference
+                    </button>
+                    <div class="container mt-5" th:if="${!conferences.isEmpty()}">
+                        <table class="table">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Date</th>
+                                <th>Pays</th>
+                                <th>Sujet</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="conference: ${conferences}">
+                                <td th:text="${conference.getConferenceName()}"></td>
+                                <td th:text="${conference.getConferenceDate()}"></td>
+                                <td th:text="${conference.getConferenceCountry()}"></td>
+                                <td th:text="${conference.getConferenceSubject()}"></td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-warning"
+                                            th:confName="${conference.getConferenceName()}"
+                                            th:confYear="${conference.getConferenceDate()}"
+                                            th:confCountry="${conference.getConferenceCountry()}"
+                                            th:confSubject="${conference.getConferenceSubject()}"
+                                            th:id="${conference.getId()}"
+                                            th:employeeId="${conference.getEmployeeId()}"
+                                            onclick="openEditConferenceModal(this)"><i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger"
+                                            th:id="${conference.getId()}"
+                                            th:data="${conference.getEmployeeId()}"
+                                            onclick="deleteConference(this)"><i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="container mt-5" th:if="${conferences == null or conferences.size() == 0}">
+                        <p>Pas de conferences.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="addConfModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ajouter une conférence</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <form action="/FicheCarriere/study/insertConference" method="post" th:object="${conferenceObject}">
+                                <input type="hidden" th:field="*{employeeId}" th:value="${employeeDetails.getId()}"/>
+                                <label for="nameConf" class="form-check-label">Nom de la conference:</label>
+                                <input type="text" maxlength="50" class="form-control" id="nameConf"
+                                       th:field="*{conferenceName}" required/>
+                                <br/>
+
+                                <label for="conferenceDate" class="form-label">Date de la Conférence: </label>
+                                <input type="date" class="form-control" id="conferenceDate" th:field="*{conferenceDate}" required/>
+                                <br/>
+                                <label for="countryConf" class="form-check-label">Pays de la conference:</label>
+                                <input type="text" maxlength="50" class="form-control" id="countryConf"
+                                       th:field="*{conferenceCountry}" required/>
+                                <br/>
+                                <label for="subjectConf" class="form-check-label">Sujet de la conference:</label>
+                                <input type="text" maxlength="50" class="form-control" id="subjectConf"
+                                       th:field="*{conferenceSubject}" required/>
+                                <br/>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="editConfModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier conférence</h5>
+                        </div>
+                        <div class="modal-body">
+
+                            <input type="hidden" id="confId"/>
+                            <label for="editConferenceName" class="form-check-label">Nom de la conférence:</label>
+                            <input type="text" class="form-control" id="editConferenceName" maxlength="50" required/>
+                            <br/>
+
+                            <label for="editConferenceDate" class="form-label">Date de la conférence: </label>
+                            <input type="date" class="form-control" id="editConferenceDate"  required/>
+                            <br/>
+                            <label for="editConferenceCountry" class="form-check-label">Pays de la conférence:</label>
+                            <input type="text" class="form-control" id="editConferenceCountry" maxlength="50" required/>
+                            <br/>
+                            <label for="editConferenceSubject" class="form-check-label">Sujet de la conférence:</label>
+                            <input type="text" class="form-control" id="editConferenceSubject" maxlength="50" required/>
+                            <br/>
+
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button class="btn btn-outline-info" onclick="saveConfData()">Sauvegarder</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/FicheCarriere/assets/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function openEditModal(button) {
+        document.getElementById('id').value = button.getAttribute('id');
+        document.getElementById('editPublicationName').value = button.getAttribute('pubName');
+        document.getElementById('editPublicationDate').value = button.getAttribute('pubYear');
+        document.getElementById('editPublicationLink').value = button.getAttribute('pubLink');
+
+        $('#editPubModal').modal('show');
+    }
+
+    function saveData() {
+        // Get values from the input fields
+        var publicationName = $('#editPublicationName').val();
+        var publicationLink = $('#editPublicationLink').val();
+        var PublicationDate = $('#editPublicationDate').val();
+        var id = $('#id').val();
+        var employeeId = $('#employeeId').val();
+        console.log(id)
+
+        // Create an object with the data
+        var data = {
+            publicationName: publicationName,
+            PublicationDate: PublicationDate,
+            employeeId: employeeId,
+            id: id,
+            publicationLink: publicationLink
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/study/updatePublication',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/study/studyForm?id=' + employeeId;
+            }
+        });
+    }
+    function deletePublication(button) {
+        var id= button.getAttribute('id');
+        var employeeId = $('#employeeId').val();
+
+        var data = {
+            id: id,
+            employeeId: employeeId
+        };
+
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/study/deletePublication',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/study/studyForm?id=' + employeeId;
+            }
+        });
+    }
+    //*********************************conferences************************************************************************
+    function openEditConferenceModal(button) {
+        document.getElementById('confId').value = button.getAttribute('id');
+        document.getElementById('editConferenceName').value = button.getAttribute('confName');
+        document.getElementById('editConferenceDate').value = button.getAttribute('confYear');
+        document.getElementById('editConferenceCountry').value = button.getAttribute('confCountry');
+        document.getElementById('editConferenceSubject').value = button.getAttribute('confSubject');
+
+        $('#editConfModal').modal('show');
+    }
+
+    function saveConfData() {
+        // Get values from the input fields
+        var conferenceName = $('#editConferenceName').val();
+        var conferenceDate = $('#editConferenceDate').val();
+        var conferenceCountry = $('#editConferenceCountry').val();
+        var conferenceSubject = $('#editConferenceSubject').val();
+        var id = $('#confId').val();
+        var employeeId = $('#employeeId').val();
+        console.log(id)
+
+        // Create an object with the data
+        var data = {
+            conferenceName: conferenceName,
+            conferenceDate: conferenceDate,
+            conferenceCountry: conferenceCountry,
+            conferenceSubject: conferenceSubject,
+            employeeId: employeeId,
+            id: id,
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/study/updateConference',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/study/studyForm?id=' + employeeId;
+            }
+        });
+    }
+    function deleteConference(button) {
+        var id= button.getAttribute('id');
+        var employeeId = $('#employeeId').val();
+
+        var data = {
+            id: id,
+            employeeId: employeeId
+        };
+
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/study/deleteConference',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/study/studyForm?id=' + employeeId;
+            }
+        });
+    }
+</script>
+</body>
+
+</html>
+
+
+
+
+
+

@@ -1,0 +1,1120 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${employeeDetails.fName} + ' ' + ${employeeDetails.lName}"></title>
+    <link rel="stylesheet" type="text/css" href="/FicheCarriere/assets/css/cv.css"/>
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/styleContent.css">
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/boxicons.min.css">
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/css/all.min.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <style>
+        body {
+            padding-top: 30px; /* Adjust this value based on the height of your navbar */
+        }
+
+        .wrapper {
+            margin-top: 30px; /* Same value as body padding-top */
+        }
+    </style>
+</head>
+<body>
+<nav
+        class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed-top ">
+    <div class="container">
+        <div class="logo">
+            <img th:src="@{/assets/img/image_news_get.png}" alt="Logo"
+                 style="max-width: 200px; max-height: 200px;"/>
+        </div>
+        <div class="logo">
+            <a th:href="@{/listEmployees}"> <img
+                    th:src="@{/assets/img/logo.png}" alt="Logo"
+                    style="max-width: 200px; max-height: 200px;"/>
+            </a>
+            <a href="#" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </div>
+</nav>
+
+<div class="wrapper clearfix">
+
+    <div class="left">
+        <div class="name-hero">
+            <div class="me-img">
+                <img th:src="@{${imagePath}}" alt="Your Name"/>
+            </div>
+            <div class="name-text">
+
+                <h1><em th:text="${employeeDetails.getfName()}"></em> <em th:text="${employeeDetails.getlName()}"></em>
+                </h1>
+                <br>
+                <p><b>Email : </b> <a th:text="${employeeDetails.getContactDetails().getEmail()} "></a></p>
+                <p><b>Téléphone : </b> <a th:text="${employeeDetails.getContactDetails().getPhoneNumber()} "></a></p>
+
+                <p><b>Date de naissance : </b><a
+                        th:text="${employeeDetails.getBirthDate()} "></a></p>
+                <p><b>Date de prise de fonction : </b> <a
+                        th:text="${employeeDetails.getHireDate()} "></a></p>
+                <p><b>Adresse : </b><a th:text="${employeeDetails.getContactDetails().getStreet()} "></a> <a
+                        th:text="${employeeDetails.getContactDetails().getCity()} "></a></p>
+
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="right">
+        <div class="inner">
+            <section class="text-center "
+                     th:if="${employeeDetails.actualDepartment == 'null'}">
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualPosition} "></a> (Détaché(e))
+                </h1>
+            </section>
+            <section class="text-center "
+                     th:if="${employeeDetails.actualDepartment != 'null'}">
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualPosition} "></a>
+                </h1>
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualDepartment} "></a>
+                </h1>
+            </section>
+            <div class="card">
+                <h5 class="card-header">Responsabilités</h5>
+                <div class="card-body">
+                    <div class="container mt-5">
+                        <h2>Description succinte des responsabilités principales</h2>
+                        <div class="form-group">
+                            <textarea id="responsabilityDescription" class="form-control" disabled
+                                      th:text="${responsabilityObject.getDescription()}"></textarea>
+                        </div>
+                        <button id="editResponsabiltyButton" class="btn btn-primary float-right"
+                                onclick="enableResponsabilitySave()">Modifier
+                        </button>
+                        <button id="saveResponsabiltyButton" class="btn btn-success float-right"
+                                onclick="saveResponsability()" style="display: none;">Enregistrer
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </br>
+            <div class="card">
+                <h5 class="card-header">Récompenses</h5>
+                <div class="card-body">
+                    <div class="container mt-5">
+                        <h2>Récompenses et reconnaissances</h2>
+                        <div class="form-group">
+                            <textarea id="rewardDescription" class="form-control" disabled
+                                      th:text="${rewardObject.getDescription()}"></textarea>
+                        </div>
+                        <button id="editRewardButton" class="btn btn-primary float-right" onclick="enableRewardSave()">
+                            Modifier
+                        </button>
+                        <button id="saveRewardButton" class="btn btn-success float-right" onclick="saveReward()"
+                                style="display: none;">Enregistrer
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </br>
+            <div class="card">
+                <h5 class="card-header">Mobilité</h5>
+                <div class="card-body">
+                    <div class="container mt-5">
+                        <h5 class="form-label" for="abroadDispo">Disponibilité pour des missions à l'étranger: </h5>
+                        <select class="form-control" name="abroadDispo" id="abroadDispo">
+                            <option value="OUI">OUI</option>
+                            <option value="NON">NON</option>
+                        </select>
+
+                    </div>
+                    <div class="container mt-5">
+                        <h5 class="form-label" for="movementDispo">Disponibilité pour des déplacements:</h5>
+                        <select class="form-control" name="movementDispo" id="movementDispo">
+                            <option value="OUI">OUI</option>
+                            <option value="NON">NON</option>
+                        </select>
+
+                    </div>
+                    <div class="container mt-5">
+                        <h5 class="form-label" for="changementDispo">Disponibilité pour des changements de poste: </h5>
+                        <select class="form-control" name="changementDispo" id="changementDispo">
+                            <option value="OUI">OUI</option>
+                            <option value="NON">NON</option>
+                        </select>
+
+                    </div>
+                    </br>
+                    <button class="btn btn-primary float-right" onclick="saveMobilityData()">Sauvegarder</button>
+
+                </div>
+            </div>
+
+            </br>
+            <!-- **********************************************************************************************Language***************************************************************************-->
+            <div class="card">
+                <h5 class="card-header">Langue</h5>
+                <div class="card-body">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#addLanguageModal"
+                            class="btn btn-primary float-right">Ajouter une langue
+                    </button>
+                    <div class="container mt-5" th:if="${!languages.isEmpty()}">
+                        <table class="table">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Langue</th>
+                                <th>Niveau</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="language: ${languages}">
+                                <td th:text="${language.getLanguage()}"></td>
+                                <td th:text="${language.getLanguageLevel()}"></td>
+
+
+                                <td>
+                                    <button type="button" class="btn btn-outline-warning"
+                                            th:language="${language.getLanguage()}"
+                                            th:LanguageLevel="${language.getLanguageLevel()}"
+                                            th:id="${language.getId()}"
+                                            th:employeeId="${language.getEmployeeID()}"
+                                            onclick="openEditLanguageModal(this)"><i class="fas fa-edit"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-danger"
+                                            th:id="${language.getId()}"
+                                            th:data="${language.getEmployeeID()}"
+                                            onclick="deleteLanguage(this)"><i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="container mt-5" th:if="${languages == null or languages.size() == 0}">
+                        <p>Pas de langues.</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal fade" id="addLanguageModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ajouter une langue</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <form id="addLanguageForm" action="/FicheCarriere/rh/insertLanguage" method="post"
+                                  th:object="${languageObject}">
+                                <input type="hidden" th:field="*{employeeID}" th:value="${employeeDetails.getId()}"/>
+
+                                <label class="form-label" for="addLanguage">Langue : </label>
+                                <select class="form-control" name="Language" id="addLanguage" required>
+                                    <option value="" disabled selected>Sélectionner la langue</option>
+                                    <option value="Français">Français</option>
+                                    <option value="Anglais">Anglais</option>
+                                    <option value="Espagnol">Espagnol</option>
+                                    <option value="Allemand">Allemand</option>
+                                    <option value="Italien">Italien</option>
+                                    <option value="Portugais">Portugais</option>
+                                    <option value="Japonais">Japonais</option>
+                                    <option value="Coréen">Coréen</option>
+                                    <option value="Chinois">Chinois</option>
+                                    <option value="Arabe">Arabe</option>
+                                </select>
+
+                                <br/>
+                                <label for="addLanguageLevel" class="form-label">Niveau : </label>
+                                <select class="form-control" name="LanguageLevel" id="addLanguageLevel" required>
+                                    <option value="" disabled selected>Sélectionner un niveau</option>
+                                    <option value="Elémentaire">Elémentaire</option>
+                                    <option value="Intermédiaire">Intermédiaire</option>
+                                    <option value="Avancé">Avancé</option>
+                                </select>
+                                <br/>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="editLanguageModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier une langue</h5>
+                        </div>
+                        <div class="modal-body">
+
+                            <input type="hidden" id="id"/>
+
+                            <label for="Language">Sélectionner une langue :</label>
+                            <select class="form-control" name="Language" id="Language" disabled required>
+                                <option value="" disabled selected>Sélectionner la langue</option>
+                                <option value="Français">Français</option>
+                                <option value="Anglais">Anglais</option>
+                                <option value="Espagnol">Espagnol</option>
+                                <option value="Allemand">Allemand</option>
+                                <option value="Italien">Italien</option>
+                                <option value="Portugais">Portugais</option>
+                                <option value="Japonais">Japonais</option>
+                                <option value="Coréen">Coréen</option>
+                                <option value="Chinois">Chinois</option>
+                                <option value="Arabe">Arabe</option>
+                            </select>
+                            <br/>
+                            <label for="editLanguageLevel" class="form-label">Niveau: </label>
+                            <select class="form-control" name="LanguageLevel" id="editLanguageLevel" required>
+                                <option value="" disabled selected>Sélectionner un niveau</option>
+                                <option value="Elémentaire">Elémentaire</option>
+                                <option value="Intermédiaire">Intermédiaire</option>
+                                <option value="Avancé">Avancé</option>
+                            </select>
+                            <br/>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button class="btn btn-outline-info" onclick="saveLanguageData()">Sauvegarder</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <!--**********************************************************TRAINING&CERTIFICATION*******************************************************************************-->
+            <div class="card">
+                <h5 class="card-header">Formations et certifications</h5>
+                <div class="card-body">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#addTrainingModal"
+                            class="btn btn-primary float-right">Ajouter une formation
+                    </button>
+                    <div class="container mt-5" th:if="${!trainings.isEmpty()}">
+                        <table class="table">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Type</th>
+                                <th>Date de début</th>
+                                <th>Date de fin</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="training: ${trainings}">
+                                <td th:text="${training.getTrainingType()}"></td>
+                                <td th:text="${training.getTrainingBeginDate()}"></td>
+                                <td th:text="${training.getTrainingEndDate()}"></td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-info"
+                                            th:trainingType="${training.getTrainingType()}"
+                                            th:trainingDescription="${training.getTrainingDescription()}"
+                                            th:trainingBeginDate="${training.getTrainingBeginDate()}"
+                                            th:trainingEndDate="${training.getTrainingEndDate()}"
+                                            th:id="${training.getId()}"
+                                            th:employeeId="${training.getEmployeeId()}"
+                                            onclick="openConsultTrainingModal(this)"><i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning"
+                                            th:trainingType="${training.getTrainingType()}"
+                                            th:trainingDescription="${training.getTrainingDescription()}"
+                                            th:trainingBeginDate="${training.getTrainingBeginDate()}"
+                                            th:trainingEndDate="${training.getTrainingEndDate()}"
+                                            th:id="${training.getId()}"
+                                            th:employeeId="${training.getEmployeeId()}"
+                                            onclick="openEditTrainingModal(this)"><i class="fas fa-edit"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-danger"
+                                            th:id="${training.getId()}"
+                                            th:data="${training.getEmployeeId()}"
+                                            onclick="deleteTraining(this)"><i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="container mt-5" th:if="${trainings == null or trainings.size() == 0}">
+
+                        <p>Pas de formations.</p>
+                    </div>
+                </div>
+                <br/>
+                <div class="card-body">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#addCertifModal"
+                            class="btn btn-primary float-right">Ajouter une certification
+                    </button>
+                    <div class="container mt-5" th:if="${!certificates.isEmpty()}">
+                        <table class="table">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Intitulé</th>
+                                <th>Date</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="certificate: ${certificates}">
+                                <td th:text="${certificate.getCertifTitle()}"></td>
+                                <td th:text="${certificate.getCertifDate()}"></td>
+                                <td></td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-info"
+                                            th:certifTitle="${certificate.getCertifTitle()}"
+                                            th:certifDate="${certificate.getCertifDate()}"
+                                            th:id="${certificate.getId()}"
+                                            th:employeeId="${certificate.getEmployeeId()}"
+                                            th:certifDescription="${certificate.getCertifDescription()}"
+                                            onclick="openConsultCertifModal(this)"><i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning"
+                                            th:certifTitle="${certificate.getCertifTitle()}"
+                                            th:certifDate="${certificate.getCertifDate()}"
+                                            th:id="${certificate.getId()}"
+                                            th:employeeId="${certificate.getEmployeeId()}"
+                                            th:certifDescription="${certificate.getCertifDescription()}"
+                                            onclick="openEditCertifModal(this)"><i class="fas fa-edit"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-danger"
+                                            th:id="${certificate.getId()}"
+                                            th:data="${certificate.getEmployeeId()}"
+                                            onclick="deleteCertif(this)"><i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="container mt-5" th:if="${certificates == null or certificates.size() == 0}">
+
+                        <p>Pas de certifications.</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal fade" id="consultTrainingModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier une formation</h5>
+                        </div>
+                        <div class="modal-body">
+                            <label for="consultTrainingType">Type de formation:</label>
+                            <select class="form-control" name="trainingType" id="consultTrainingType" disabled>
+                                <option value="" disabled selected>Choisir le type du formation</option>
+                                <option value="Professionnel">Professionnel</option>
+                                <option value="Autres">Autres</option>
+                            </select>
+
+                            <label for="consultTrainingDescription" class="form-label">Description du
+                                formation: </label>
+                            <textarea class="form-control" id="consultTrainingDescription" disabled></textarea>
+                            <br/>
+                            <label for="consultTrainingBeginDate" class="form-label">Date de début: </label>
+                            <input type="date" class="form-control" id="consultTrainingBeginDate" disabled/>
+
+                            <label for="consultTrainingEndDate" class="form-label">Date de fin: </label>
+                            <input type="date" class="form-control" id="consultTrainingEndDate" disabled/>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="addTrainingModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ajouter une formation</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <form action="/FicheCarriere/rh/insertTraining" method="post" th:object="${trainingObject}">
+                                <input type="hidden" th:field="*{employeeId}" th:value="${employeeDetails.getId()}"/>
+
+                                <label for="addTrainingType">Type de formation:</label>
+                                <select class="form-control" name="trainingType" id="addTrainingType">
+                                    <option value="" disabled selected>Choisir le type du formation</option>
+                                    <option value="Professionnel">Professionnel</option>
+                                    <option value="Autres">Autres</option>
+                                </select>
+
+                                <label for="addTrainingDescription" class="form-label">Description du
+                                    formation: </label>
+                                <textarea type="text" class="form-control" id="addTrainingDescription"
+                                          th:field="*{trainingDescription}"></textarea>
+
+
+                                <label for="addTrainingBeginDate" class="form-label">Date de début: </label>
+                                <input type="date" class="form-control" id="addTrainingBeginDate"
+                                       th:field="*{trainingBeginDate}" required/>
+
+                                <label for="addTrainingEndDate" class="form-label">Date de fin: </label>
+                                <input type="date" class="form-control" id="addTrainingEndDate"
+                                       th:field="*{trainingEndDate}" required/>
+                                <br/>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="editTrainingModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier une formation</h5>
+                        </div>
+                        <div class="modal-body">
+                            <label for="editTrainingType">Type de formation:</label>
+                            <select class="form-control" name="trainingType" id="editTrainingType" required>
+                                <option value="" disabled selected>Choisir le type du formation</option>
+                                <option value="Professionnel">Professionnel</option>
+                                <option value="Autres">Autres</option>
+                            </select>
+
+                            <label for="editTrainingDescription" class="form-label">Description du formation: </label>
+                            <textarea class="form-control" id="editTrainingDescription"></textarea>
+                            <br/>
+                            <label for="editTrainingBeginDate" class="form-label">Date de début: </label>
+                            <input type="date" class="form-control" id="editTrainingBeginDate" required/>
+
+                            <label for="editTrainingEndDate" class="form-label">Date de fin: </label>
+                            <input type="date" class="form-control" id="editTrainingEndDate" required/>
+                            <br/>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button class="btn btn-outline-info" onclick="saveTrainingData()">Sauvegarder</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="consultCertifModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier une certification</h5>
+                        </div>
+                        <div class="modal-body">
+                            <label for="consultCertifTitle" class="form-label">Intitulé : </label>
+                            <input type="text" class="form-control" id="consultCertifTitle" disabled/>
+                            <br/>
+                            <label for="consultCertifDate" class="form-label">Date : </label>
+                            <input type="date" class="form-control" id="consultCertifDate" disabled/>
+                            <br/>
+                            <label for="consultCertifDescription" class="form-label">Description du
+                                certification: </label>
+                            <textarea class="form-control" id="consultCertifDescription" disabled></textarea>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="addCertifModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ajouter une certification</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <form action="/FicheCarriere/rh/insertCertificate" method="post" th:object="${certificateObject}">
+                                <input type="hidden" th:field="*{employeeId}" th:value="${employeeDetails.getId()}"/>
+                                <label for="caddCertifTitle" class="form-label">Intitulé : </label>
+                                <input type="text" class="form-control" id="caddCertifTitle" th:field="*{certifTitle}"
+                                       required/>
+                                <br/>
+                                <label for="addCertifDate" class="form-label">Date: </label>
+                                <input type="date" class="form-control" id="addCertifDate" th:field="*{certifDate}"
+                                       required/>
+                                <br/>
+                                <label for="addCertifDescription" class="form-label">Description du
+                                    certification: </label>
+                                <textarea type="text" class="form-control" id="addCertifDescription"
+                                          th:field="*{certifDescription}"></textarea>
+                                <br/>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="editCertifModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier une certification</h5>
+                        </div>
+                        <div class="modal-body">
+                            <label for="editCertifTitle" class="form-label">Intitulé : </label>
+                            <input type="text" class="form-control" id="editCertifTitle" required/>
+                            <br/>
+                            <label for="editCertifDate" class="form-label">Date de début: </label>
+                            <input type="date" class="form-control" id="editCertifDate" required/>
+                            <br/>
+                            <label for="editCertifDescription" class="form-label">Description du certification: </label>
+                            <textarea class="form-control" id="editCertifDescription"></textarea>
+
+                            <br/>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button class="btn btn-outline-info" onclick="saveCertifData()">Sauvegarder</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--**********************************************************SKILLS*******************************************************************************-->
+            <br/>
+            <div class="card">
+                <h5 class="card-header">Compétences</h5>
+                <div class="card-body">
+                    <h3>Compétences techniques</h3>
+                    <div class="input-group mb-3">
+                        <input id="skill" type="text" class="form-control" placeholder="expertise en finance,.."
+                               aria-label="test" aria-describedby="button-addon2" required>
+                        <button class="btn btn-outline-secondary" type="button" id="addSkill" onclick="saveSkill()">
+                            Ajouter une compétence
+                        </button>
+
+                    </div>
+                    <br/>
+                    <ul class="skill-set">
+                        <li th:each="skill : ${skills}">
+                            <span th:text="${skill.getSkill()}"></span>
+                            <input type="hidden" id="skillId"   th:value="${skill.getId()}"/>
+                            <i class="fas fa-times close-icon delete-icon" onclick="deleteSkill()"></i>
+                        </li>
+                    </ul>
+                    <p th:if="${skills == null or skills.size() == 0}">Pas de compétences techniques</p>
+
+
+                    <h3>Outils informatique maitrisés</h3>
+                    <div class="input-group mb-3">
+                        <input id="itSkill" type="text" class="form-control" placeholder="expertise en finance,.."
+                               aria-label="test" aria-describedby="button-addon2" required>
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"
+                                onclick="saveItSkill()">Ajouter un outil
+                        </button>
+
+                    </div>
+                    <ul class="skill-set">
+                        <li th:each="iTskill : ${iTskills}">
+                            <span th:text="${iTskill.getSkill()}"></span>
+                            <input type="hidden" id="iTskillId"  th:value="${iTskill.getId()}"/>
+                            <i class="fas fa-times close-icon delete-icon" onclick="deleteItSkill()"></i>
+                        </li>
+                    </ul>
+                    <p th:if="${iTskills == null or iTskills.size() == 0}">Pas de compétences informatiques</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/FicheCarriere/assets/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    // Assuming mobilityObject.getMovementDispo() returns either "OUI" or "NON"
+
+    function openEditLanguageModal(button) {
+        document.getElementById('id').value = button.getAttribute('id');
+        document.getElementById('Language').value = button.getAttribute('Language');
+        document.getElementById('editLanguageLevel').value = button.getAttribute('LanguageLevel');
+
+        $('#editLanguageModal').modal('show');
+    }
+
+
+    function saveLanguageData() {
+        // Get values from the input fields
+        var language = $('#Language').val();
+        var LanguageLevel = $('#editLanguageLevel').val();
+        var id = $('#id').val();
+        var employeeId = $('#employeeID').val();
+
+        var data = {
+            language: language,
+            languageLevel: LanguageLevel,
+            id: id,
+            employeeID: employeeId,
+
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/updateLanguage',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/rh/rhForm?id=' + employeeId;
+            }
+        });
+    }
+
+    function deleteLanguage(button) {
+        var id = button.getAttribute('id');
+        var employeeId = $('#employeeID').val();
+        console.log(employeeId)
+        var data = {
+            id: id,
+            employeeID: employeeId
+        };
+
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/deleteLanguage',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/rh/rhForm?id=' + employeeId;
+            }
+        });
+    }
+</script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        var abroadDispoValue = /*[[${mobilityObject.getAbroadDispo()}]]*/ '';
+        var movementDispoValue = /*[[${mobilityObject.getMovementDispo()}]]*/ '';
+        var changementDispoValue = /*[[${mobilityObject.getChangementDispo()}]]*/ '';
+
+
+        // Get the select element
+        var abroadDispo = document.getElementById('abroadDispo');
+
+        // Loop through the options to find the matching value and set it as selected
+        for (var i = 0; i < abroadDispo.options.length; i++) {
+            if (abroadDispo.options[i].value === abroadDispoValue) {
+                abroadDispo.options[i].selected = true;
+                break; // Exit the loop once the match is found
+            }
+        }
+        var movementDispo = document.getElementById('movementDispo');
+
+        // Loop through the options to find the matching value and set it as selected
+        for (var i = 0; i < movementDispo.options.length; i++) {
+            if (movementDispo.options[i].value === movementDispoValue) {
+                movementDispo.options[i].selected = true;
+                break; // Exit the loop once the match is found
+            }
+        }
+        var changementDispo = document.getElementById('changementDispo');
+
+        // Loop through the options to find the matching value and set it as selected
+        for (var i = 0; i < changementDispo.options.length; i++) {
+            if (changementDispo.options[i].value === changementDispoValue) {
+                changementDispo.options[i].selected = true;
+                break; // Exit the loop once the match is found
+            }
+        }
+        // Replace the following line with Thymeleaf expression to get the selected language value
+        var selectedLanguage = /*[[${languages}]]*/ [];
+
+        // Create an array to store languages to be disabled
+        var toDisableLanguages = [];
+
+        // Iterate through the selectedLanguage array and extract the language names
+        for (var i = 0; i < selectedLanguage.length; i++) {
+            console.log(selectedLanguage[i].language);
+            toDisableLanguages.push(selectedLanguage[i].language);
+        }
+
+        // Disable the selected languages in the dropdown
+        $("#addLanguage option").each(function () {
+            var languageOption = $(this).val();
+
+            if (toDisableLanguages.includes(languageOption)) {
+                $(this).prop('disabled', true);
+            }
+        });
+    });
+
+    /************************************************TRAINING***************************************************************************/
+    function openEditTrainingModal(button) {
+        document.getElementById('id').value = button.getAttribute('id');
+        document.getElementById('editTrainingDescription').value = button.getAttribute('trainingDescription');
+        document.getElementById('editTrainingType').value = button.getAttribute('trainingType');
+        document.getElementById('editTrainingBeginDate').value = button.getAttribute('trainingBeginDate');
+        document.getElementById('editTrainingEndDate').value = button.getAttribute('trainingEndDate');
+
+
+        $('#editTrainingModal').modal('show');
+    }
+
+    function openConsultTrainingModal(button) {
+        document.getElementById('consultTrainingDescription').value = button.getAttribute('trainingDescription');
+        document.getElementById('consultTrainingType').value = button.getAttribute('trainingType');
+        document.getElementById('consultTrainingBeginDate').value = button.getAttribute('trainingBeginDate');
+        document.getElementById('consultTrainingEndDate').value = button.getAttribute('trainingEndDate');
+        $('#consultTrainingModal').modal('show');
+    }
+
+    function saveTrainingData() {
+        // Get values from the input fields
+        var trainingDescription = $('#editTrainingDescription').val();
+        var id = $('#id').val();
+        var employeeId = $('#employeeId').val();
+        var trainingType = $('#editTrainingType').val();
+        var trainingBeginDate = $('#editTrainingBeginDate').val();
+        var trainingEndDate = $('#editTrainingEndDate').val();
+        console.log(trainingType);
+        var data = {
+            trainingDescription: trainingDescription,
+            trainingType: trainingType,
+            id: id,
+            employeeId: employeeId,
+            trainingBeginDate: trainingBeginDate,
+            trainingEndDate: trainingEndDate
+
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/updateTraining',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/rh/rhForm?id=' + employeeId;
+            }
+        });
+    }
+
+    function saveSkill() {
+        // Get values from the input fields
+        var employeeId = $('#employeeId').val();
+        var skill = $('#skill').val();
+        var itSkill = $('#itSkill').val();
+
+        var data = {
+            skill: skill,
+            employeeId: employeeId,
+            skillType: 'technique'
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/insertSkill',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/rh/rhForm?id=' + employeeId;
+            }
+        });
+    }
+
+    function saveItSkill() {
+        // Get values from the input fields
+        var employeeId = $('#employeeId').val();
+        var itSkill = $('#itSkill').val();
+
+        var data = {
+            skill: itSkill,
+            employeeId: employeeId,
+            skillType: 'informatique'
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/insertSkill',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/rh/rhForm?id=' + employeeId;
+            }
+        });
+    }
+
+
+    function deleteTraining(button) {
+        var id = button.getAttribute('id');
+        var employeeId = $('#employeeId').val();
+
+        var data = {
+            id: id,
+            employeeId: employeeId
+        };
+
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/deleteTraining',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/rh/rhForm?id=' + employeeId;
+            }
+        });
+    }
+
+    /************************************************Certifications***************************************************************************/
+    function openEditCertifModal(button) {
+        document.getElementById('id').value = button.getAttribute('id');
+        document.getElementById('editCertifDescription').value = button.getAttribute('certifDescription');
+        document.getElementById('editCertifDate').value = button.getAttribute('certifDate');
+        document.getElementById('editCertifTitle').value = button.getAttribute('certifTitle');
+
+
+        $('#editCertifModal').modal('show');
+    }
+
+    function openConsultCertifModal(button) {
+        document.getElementById('consultCertifDescription').value = button.getAttribute('certifDescription');
+        document.getElementById('consultCertifDate').value = button.getAttribute('certifDate');
+        document.getElementById('consultCertifTitle').value = button.getAttribute('certifTitle');
+        $('#consultCertifModal').modal('show');
+    }
+
+    function saveCertifData() {
+        // Get values from the input fields
+        var certifDescription = $('#editCertifDescription').val();
+        var certifTitle = $('#editCertifTitle').val();
+        var id = $('#id').val();
+        var employeeId = $('#employeeId').val();
+        var certifDate = $('#editCertifDate').val();
+
+
+        var data = {
+            certifTitle: certifTitle,
+            certifDescription: certifDescription,
+            id: id,
+            employeeId: employeeId,
+            certifDate: certifDate,
+
+
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/updateCertificate',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/rh/rhForm?id=' + employeeId;
+            }
+        });
+    }
+
+    function deleteCertif(button) {
+        var id = button.getAttribute('id');
+        var employeeId = $('#employeeId').val();
+
+        var data = {
+            id: id,
+            employeeId: employeeId
+        };
+
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/deleteCertificate',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/rh/rhForm?id=' + employeeId;
+            }
+        });
+    }
+
+    //***************************************RESPONSABILITY***************************
+    function enableResponsabilitySave() {
+
+        var textarea = document.getElementById('responsabilityDescription');
+
+        var editResponsabiltyButton = document.getElementById('editResponsabiltyButton');
+
+        var saveResponsabiltyButton = document.getElementById('saveResponsabiltyButton');
+
+
+        textarea.disabled = !textarea.disabled;
+
+        editResponsabiltyButton.style.display = textarea.disabled ? 'block' : 'none';
+
+        saveResponsabiltyButton.style.display = textarea.disabled ? 'none' : 'block';
+
+    }
+
+
+    function saveResponsability() {
+
+        var textarea = document.getElementById('responsabilityDescription');
+
+        var editResponsabiltyButton = document.getElementById('editResponsabiltyButton');
+
+        var saveResponsabiltyButton = document.getElementById('saveResponsabiltyButton');
+
+
+        textarea.disabled = true;
+
+        editResponsabiltyButton.style.display = 'block';
+
+        saveResponsabiltyButton.style.display = 'none';
+
+        var responsabilityDescription = $('#responsabilityDescription').val();
+        var employeeId = $('#employeeId').val();
+
+
+        var data = {
+            description: responsabilityDescription,
+            employeeId: employeeId
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/insertResponsability',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                //window.location.href = '/rhForm?id=' + employeeId;
+                $('#responsabilityDescription').val(responsabilityObject.getDescription());
+
+            }
+        });
+
+        // You can add code here to save the content of the text area, for example, sending it to a server.
+
+    }
+
+    //***************************************REWARD***************************
+    function enableRewardSave() {
+
+        var textarea = document.getElementById('rewardDescription');
+
+        var editRewardButton = document.getElementById('editRewardButton');
+
+        var saveRewardButton = document.getElementById('saveRewardButton');
+
+
+        textarea.disabled = !textarea.disabled;
+
+        editRewardButton.style.display = textarea.disabled ? 'block' : 'none';
+
+        saveRewardButton.style.display = textarea.disabled ? 'none' : 'block';
+
+    }
+
+
+    function saveReward() {
+
+        var textarea = document.getElementById('rewardDescription');
+
+        var editRewardButton = document.getElementById('editRewardButton');
+
+        var saveRewardButton = document.getElementById('saveRewardButton');
+
+
+        textarea.disabled = true;
+
+        editRewardButton.style.display = 'block';
+
+        saveRewardButton.style.display = 'none';
+
+        var rewardDescription = $('#rewardDescription').val();
+        var employeeId = $('#employeeId').val();
+
+
+        var data = {
+            description: rewardDescription,
+            employeeId: employeeId
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/insertReward',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/rh/rhForm?id=' + employeeId;
+            }
+        });
+
+        // You can add code here to save the content of the text area, for example, sending it to a server.
+
+    }
+
+    function saveMobilityData() {
+        // Get values from the input fields
+        var abroadDispo = $('#abroadDispo').val();
+        var movementDispo = $('#movementDispo').val();
+        var changementDispo = $('#changementDispo').val();
+        var employeeId = $('#employeeID').val();
+
+        var data = {
+            abroadDispo: abroadDispo,
+            movementDispo: movementDispo,
+            changementDispo: changementDispo,
+            employeeId: employeeId,
+
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/insertMobility',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/rh/rhForm?id=' + employeeId;
+            }
+        });
+    }
+
+    // Your JavaScript code can be added here
+    document.querySelectorAll('.delete-icon').forEach(function(icon) {
+        icon.addEventListener('click', function() {
+            icon.parentNode.remove();
+        });
+    });
+
+    function deleteSkill() {
+        // Get values from the input fields
+        var id = $('#skillId').val();
+        var employeeId = $('#employeeID').val();
+
+        var data = {
+            id: id,
+            employeeId:employeeId
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/deleteSkill',  // Replace with the actual endpoint
+            data: data
+        });
+    }
+
+    function deleteItSkill() {
+        // Get values from the input fields
+        var id = $('#iTskillId').val();
+        var employeeId = $('#employeeID').val();
+
+        var data = {
+            id: id,
+            employeeId:employeeId
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/rh/deleteSkill',  // Replace with the actual endpoint
+            data: data
+        });
+    }
+</script>
+</body>
+
+</html>
+
+
+
+
+
+
