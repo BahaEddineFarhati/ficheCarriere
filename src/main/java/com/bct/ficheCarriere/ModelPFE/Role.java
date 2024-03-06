@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String nom;
 
      public Role(String nom) {

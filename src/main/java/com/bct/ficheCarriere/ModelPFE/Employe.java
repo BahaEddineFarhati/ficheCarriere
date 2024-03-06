@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import java.util.*;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "Employe")
 public class Employe {
     @jakarta.persistence.Id

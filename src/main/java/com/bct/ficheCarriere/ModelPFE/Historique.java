@@ -9,7 +9,7 @@ import java.util.Date;
 public class Historique {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  long id;
+    private  Long id;
     private Date date;
 
     public Utilisateur getUtilisateur() {

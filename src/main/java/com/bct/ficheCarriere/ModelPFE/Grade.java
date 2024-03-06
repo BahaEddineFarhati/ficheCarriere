@@ -12,7 +12,7 @@ import java.util.Set;
 public class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private Date date;
     private String Direction;
     private String Service;

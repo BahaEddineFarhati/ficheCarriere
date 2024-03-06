@@ -12,7 +12,7 @@ import java.util.Set;
 public class Fonction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  long ID;
+    private  Long ID;
      private Date Date;
      private String Nom;
 

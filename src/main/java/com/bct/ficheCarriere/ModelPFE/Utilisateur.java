@@ -5,24 +5,16 @@ import org.springframework.data.annotation.Id;
 
 @Entity
 @Table(name = "Utilisateur ")
-public class Utilisateur {
+public class Utilisateur extends Employe{
 
-    @jakarta.persistence.Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id ;
+
 
     @ManyToOne
     @JoinColumn(name = "id", nullable = false)
     private Role role;
 
 
-    public long getId() {
-        return Id;
-    }
 
-    public void setId(long id) {
-        Id = id;
-    }
 
     public Role getRole() {
         return role;
@@ -36,7 +28,6 @@ public class Utilisateur {
     @Override
     public String toString() {
         return "Utilisateur{" +
-                "Id=" + Id +
                 ", role=" + role +
                 '}';
     }

@@ -8,7 +8,7 @@ import java.util.Date;
 public class FormationUniversitaire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String Type;
     private String NomDuDiplome;
     private  String Faculte;

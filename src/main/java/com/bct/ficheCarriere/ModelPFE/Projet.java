@@ -9,7 +9,7 @@ import java.util.*;
 public class Projet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private Long Id;
     private String Type;
     private Date Date;
     private String RoleProjet;
