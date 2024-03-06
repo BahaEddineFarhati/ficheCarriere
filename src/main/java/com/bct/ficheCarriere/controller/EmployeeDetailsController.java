@@ -1,13 +1,7 @@
 package com.bct.ficheCarriere.controller;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import com.bct.ficheCarriere.model.*;
 import com.bct.ficheCarriere.repository.*;
-import com.bct.ficheCarriere.service.EmployeeDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

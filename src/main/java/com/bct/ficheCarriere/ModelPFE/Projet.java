@@ -2,9 +2,7 @@ package com.bct.ficheCarriere.ModelPFE;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "Projet")
@@ -16,8 +14,9 @@ public class Projet {
     private Date Date;
     private String RoleProjet;
 
-    @ManyToMany(mappedBy = "Projets")
-    private Set<Employe> employees = new HashSet<>();
+    @OneToMany()
+    private ArrayList<ProjetEmployeKey> Employe;
+
 
     public long getId() {
         return Id;
@@ -64,4 +63,7 @@ public class Projet {
                 ", RoleProjet='" + RoleProjet + '\'' +
                 '}';
     }
+
+
+
 }

@@ -2,6 +2,7 @@ package com.bct.ficheCarriere.ModelPFE;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,8 +17,9 @@ public class Grade {
     private String Direction;
     private String Service;
 
-    @ManyToMany(mappedBy = "Conferences")
-    private Set<Employe> Grades = new HashSet<>();
+
+
+
 
 
 
@@ -79,4 +81,6 @@ public class Grade {
                 ", Service='" + Service + '\'' +
                 '}';
     }
+    @OneToMany()
+    private ArrayList<GradeEmployeKey> employe;
 }

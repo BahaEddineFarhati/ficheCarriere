@@ -1,12 +1,12 @@
 package com.bct.ficheCarriere.ModelPFE;
 
 
+import com.bct.ficheCarriere.Repositories.EmployeRepository;
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "Employe")
@@ -25,19 +25,20 @@ public class Employe {
     private Boolean DisponibilitePourDesMissionALEtranger;
     private Boolean DisponibilitePourDesChangementsDePoste;
     private Boolean DisponibilitePourDesDeplacements;
-    private String matricule;
 
-    @ManyToMany
-    private Set<Conference> Conferences = new HashSet<>();
 
-    @ManyToMany
-    private Set<Grade> Grades = new HashSet<>();
+    @OneToMany()
+    private ArrayList<ConferenceEmployeKey> conference ;
 
-    @ManyToMany
-    private Set<Fonction> Fonctions = new HashSet<>();
+    @OneToMany()
+    private ArrayList<GradeEmployeKey> grade ;
 
-    @ManyToMany
-    private Set<Projet> Projets = new HashSet<>();
+    @OneToMany()
+    private ArrayList<ProjetEmployeKey> fonction;
+
+
+    @OneToMany()
+    private ArrayList<ProjetEmployeKey> projet;
 
 
 
@@ -45,6 +46,9 @@ public class Employe {
     @ManyToOne
     @JoinColumn(name = "Id", nullable = false)
     private Departement departement;
+
+
+
 
     public Employe(String matricule, String nom, String prenom, String image, String email, Date dateDeNaissance, String adresse, String responsabilite, String recompenceEtReconnaissance, Boolean disponibilitePourDesMissionALEtranger, Boolean disponibilitePourDesChangementsDePoste, Boolean disponibilitePourDesDeplacements , Departement departement) {
         Matricule = matricule;
@@ -64,13 +68,7 @@ public class Employe {
 
     public Employe () {}
 
-    public void setMatricule(String matricule) {
-        this.matricule = matricule;
-    }
 
-    public String getMatricule() {
-        return matricule;
-    }
 
     public String getNom() {
         return Nom;
@@ -183,7 +181,6 @@ public class Employe {
                 ", DisponibilitePourDesMissionALEtranger=" + DisponibilitePourDesMissionALEtranger +
                 ", DisponibilitePourDesChangementsDePoste=" + DisponibilitePourDesChangementsDePoste +
                 ", DisponibilitePourDesDeplacements=" + DisponibilitePourDesDeplacements +
-                ", matricule='" + matricule + '\'' +
                 ", departement=" + departement +
                 '}';
     }

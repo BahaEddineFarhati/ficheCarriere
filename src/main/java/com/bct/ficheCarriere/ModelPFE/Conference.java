@@ -2,6 +2,7 @@ package com.bct.ficheCarriere.ModelPFE;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +13,7 @@ public class Conference {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  long Id;
+    private  Long Id;
     private Date Date;
     private String Nom;
     private String Sujet;
@@ -33,10 +34,6 @@ public class Conference {
     public Conference() {
 
     }
-
-
-
-
 
     public Set<Employe> getEmployees() {
         return employees;
@@ -96,4 +93,6 @@ public class Conference {
                 ", Pays='" + Pays + '\'' +
                 '}';
     }
+    @OneToMany()
+    private ArrayList<ConferenceEmployeKey> Employe;
 }

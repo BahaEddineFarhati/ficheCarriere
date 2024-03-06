@@ -4,7 +4,6 @@ import com.bct.ficheCarriere.model.Conference;
 import com.bct.ficheCarriere.model.Publication;
 import com.bct.ficheCarriere.repository.EmployeeDetailsRepository;
 import com.bct.ficheCarriere.repository.StudyRepository;
-import com.bct.ficheCarriere.service.EmployeeDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

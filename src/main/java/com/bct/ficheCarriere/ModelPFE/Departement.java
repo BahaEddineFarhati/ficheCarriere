@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 public class Departement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private long Id;
+     private Long Id;
     private String Abreviation;
     private String Nom;
 

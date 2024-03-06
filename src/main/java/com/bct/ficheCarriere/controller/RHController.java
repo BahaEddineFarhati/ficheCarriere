@@ -1,7 +1,6 @@
 package com.bct.ficheCarriere.controller;
 import com.bct.ficheCarriere.model.*;
 import com.bct.ficheCarriere.repository.*;
-import com.bct.ficheCarriere.service.EmployeeDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
