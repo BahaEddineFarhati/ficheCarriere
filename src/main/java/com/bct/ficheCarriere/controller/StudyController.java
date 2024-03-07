@@ -1,4 +1,4 @@
-package com.bct.ficheCarriere.controller;
+/*package com.bct.ficheCarriere.controller;
 
 import com.bct.ficheCarriere.model.Conference;
 import com.bct.ficheCarriere.model.Publication;
@@ -75,3 +75,4 @@ public class StudyController {
         model.addAttribute("conferenceObject",conference);
         return "studyForm";}
 }
+*/

@@ -1,4 +1,4 @@
-package com.bct.ficheCarriere.security;
+/*package com.bct.ficheCarriere.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -62,3 +62,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 }
+*/

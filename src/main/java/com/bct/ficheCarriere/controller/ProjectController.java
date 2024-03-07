@@ -1,4 +1,4 @@
-package com.bct.ficheCarriere.controller;
+/*package com.bct.ficheCarriere.controller;
 
 import com.bct.ficheCarriere.model.Conference;
 import com.bct.ficheCarriere.model.Project;
@@ -55,3 +55,4 @@ public class ProjectController {
         return "projectForm";}
 }
 
+*/

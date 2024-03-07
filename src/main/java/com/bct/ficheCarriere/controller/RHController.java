@@ -1,4 +1,4 @@
-package com.bct.ficheCarriere.controller;
+/*package com.bct.ficheCarriere.controller;
 import com.bct.ficheCarriere.model.*;
 import com.bct.ficheCarriere.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -167,3 +167,4 @@ public class RHController {
         model.addAttribute("skillObject",skill);
         return "rhForm";}
 }
+*/
