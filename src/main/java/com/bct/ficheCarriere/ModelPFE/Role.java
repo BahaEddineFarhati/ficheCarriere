@@ -1,5 +1,7 @@
 package com.bct.ficheCarriere.ModelPFE;
 
+import java.util.ArrayList;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -41,4 +43,9 @@ public class Role {
                  ", nom='" + nom + '\'' +
                  '}';
      }
+    @OneToMany()
+      private ArrayList<Utilisateur> utilisateur;
+
+
+
  }

@@ -26,11 +26,6 @@ public class FormationUniversitaire {
     }
 
 
-    @ManyToOne
-    @JoinColumn(name = "Matricule", nullable = false)
-    private Employe employe;
-
-
     public Employe getEmploye() {
         return employe;
     }
@@ -89,4 +84,10 @@ public class FormationUniversitaire {
                 ", DateDobtention=" + DateDobtention +
                 '}';
     }
+
+   @ManyToOne
+   @JoinColumn(name = "Matricule", nullable = false)
+    private Employe employe;
+
+
 }

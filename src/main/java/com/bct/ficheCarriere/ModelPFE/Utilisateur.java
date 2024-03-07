@@ -9,13 +9,6 @@ public class Utilisateur extends Employe{
 
 
 
-    @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
-    private Role role;
-
-
-
-
     public Role getRole() {
         return role;
     }
@@ -32,6 +25,9 @@ public class Utilisateur extends Employe{
                 '}';
     }
 
+    @ManyToOne
+    @JoinColumn(name = "Id", nullable = false)
+    private Role role;
 
 
 }

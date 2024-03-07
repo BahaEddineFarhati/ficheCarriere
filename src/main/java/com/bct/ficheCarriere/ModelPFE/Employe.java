@@ -1,9 +1,8 @@
 package com.bct.ficheCarriere.ModelPFE;
 
 
-import com.bct.ficheCarriere.Repositories.EmployeRepository;
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.annotation.Id;
 
 import java.util.*;
@@ -26,29 +25,6 @@ public class Employe {
     private Boolean DisponibilitePourDesMissionALEtranger;
     private Boolean DisponibilitePourDesChangementsDePoste;
     private Boolean DisponibilitePourDesDeplacements;
-
-
-    @OneToMany()
-    private ArrayList<ConferenceEmployeKey> conference ;
-
-    @OneToMany()
-    private ArrayList<GradeEmployeKey> grade ;
-
-    @OneToMany()
-    private ArrayList<ProjetEmployeKey> fonction;
-
-
-    @OneToMany()
-    private ArrayList<ProjetEmployeKey> projet;
-
-
-
-
-    @ManyToOne
-    @JoinColumn(name = "Id", nullable = false)
-    private Departement departement;
-
-
 
 
     public Employe(String matricule, String nom, String prenom, String image, String email, Date dateDeNaissance, String adresse, String responsabilite, String recompenceEtReconnaissance, Boolean disponibilitePourDesMissionALEtranger, Boolean disponibilitePourDesChangementsDePoste, Boolean disponibilitePourDesDeplacements , Departement departement) {
@@ -185,4 +161,26 @@ public class Employe {
                 ", departement=" + departement +
                 '}';
     }
+
+
+    @OneToMany()
+    private ArrayList<ConferenceEmployeKey> conference ;
+
+    @OneToMany()
+    private ArrayList<GradeEmployeKey> grade ;
+
+    @OneToMany()
+    private ArrayList<ProjetEmployeKey> fonction;
+
+
+    @OneToMany()
+    private ArrayList<ProjetEmployeKey> projet;
+
+   
+
+
+    @ManyToOne
+    @JoinColumn(name = "Id", nullable = false)
+    private Departement departement;
+
 }

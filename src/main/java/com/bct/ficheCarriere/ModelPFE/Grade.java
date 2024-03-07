@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "Grade")
@@ -18,20 +16,9 @@ public class Grade {
     private String Service;
 
 
-
-
-
-
-
-
     public Grade() {
 
     }
-
-
-
-
-
 
 
     public long getId() {

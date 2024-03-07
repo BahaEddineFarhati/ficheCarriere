@@ -3,8 +3,11 @@ package com.bct.ficheCarriere.ModelPFE;
 import jakarta.persistence.*;
 
 import java.util.Date;
+
 @Entity
 @Table(name = "Publication")
+
+
 public class Publication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +19,6 @@ public class Publication {
     public Publication() {
         
     }
-
-
-
-    @ManyToOne
-    @JoinColumn(name = "Matricule", nullable = false)
-    private Employe employe;
 
 
     public Employe getEmploye() {
@@ -80,4 +77,11 @@ public class Publication {
                 ", lien='" + lien + '\'' +
                 '}';
     }
+
+    @ManyToOne
+    @JoinColumn(name = "Matricule", nullable = false)
+    private Employe employe;
+
+
+
 }

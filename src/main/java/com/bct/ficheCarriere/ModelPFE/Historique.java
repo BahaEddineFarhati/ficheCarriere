@@ -20,9 +20,7 @@ public class Historique {
         this.utilisateur = utilisateur;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "Id", nullable = false)
-    private Utilisateur utilisateur;
+    
 
     public Historique(Date date, Utilisateur utilisateur) {
         this.date = date;
@@ -57,4 +55,8 @@ public class Historique {
                 ", utilisateur=" + utilisateur +
                 '}';
     }
+
+    @ManyToOne
+    @JoinColumn(name = "idUtilisateur", nullable = false)
+    private Utilisateur utilisateur;
 }

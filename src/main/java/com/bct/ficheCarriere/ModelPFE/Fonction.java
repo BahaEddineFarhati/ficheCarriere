@@ -66,5 +66,5 @@ public class Fonction {
                 '}';
     }
     @OneToMany()
-    private ArrayList<FonctionEmployeKey> Employe;
+    private ArrayList<FonctionEmployeKey> employe;
 }

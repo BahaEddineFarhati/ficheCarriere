@@ -14,9 +14,7 @@ public class Projet {
     private Date Date;
     private String RoleProjet;
 
-    @OneToMany()
-    private ArrayList<ProjetEmployeKey> Employe;
-
+    
 
     public long getId() {
         return Id;
@@ -64,6 +62,7 @@ public class Projet {
                 '}';
     }
 
-
+    @OneToMany()
+    private ArrayList<ProjetEmployeKey> employe;
 
 }

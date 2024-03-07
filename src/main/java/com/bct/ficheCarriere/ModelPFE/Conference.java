@@ -1,11 +1,8 @@
 package com.bct.ficheCarriere.ModelPFE;
 
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "Conference")
@@ -20,28 +17,20 @@ public class Conference {
     private  String Pays;
 
 
-    @ManyToMany(mappedBy = "Conferences")
-    private Set<Employe> employees = new HashSet<>();
+   
 
-    public Conference(java.util.Date date, String nom, String sujet, String pays , Set<Employe> employees) {
+    public Conference(java.util.Date date, String nom, String sujet, String pays ) {
         Date = date;
         Nom = nom;
         Sujet = sujet;
         Pays = pays;
-        this.employees = employees ;
+     
     }
 
     public Conference() {
 
     }
 
-    public Set<Employe> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(Set<Employe> employees) {
-        this.employees = employees;
-    }
 
     public long getId() {
         return Id;
@@ -94,5 +83,6 @@ public class Conference {
                 '}';
     }
     @OneToMany()
-    private ArrayList<ConferenceEmployeKey> Employe;
+    private ArrayList<ConferenceEmployeKey> employe;
+   
 }

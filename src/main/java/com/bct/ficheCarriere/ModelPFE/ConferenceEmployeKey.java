@@ -1,21 +1,29 @@
 package com.bct.ficheCarriere.ModelPFE;
 
+
+
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 
-@Embeddable
+
 @Entity
-public class ConferenceEmployeKey implements Serializable {
+@Table(name = "ConferenceEmployeKey")
+
+
+public class ConferenceEmployeKey   {
 
     @Id
-    private Long id;
-    @ManyToOne()
-    @JoinColumn(name = "matricule")
-    private Employe employe;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+      private long id;
+  
 
-    @ManyToOne()
+    @ManyToOne
+    @JoinColumn(name = "matricule")
+      private Employe employe;
+
+
+    @ManyToOne
     @JoinColumn(name="idconference")
-    private Conference conference;
+      private Conference conference;
 
 }
