@@ -1,4 +1,4 @@
-package com.bct.ficheCarriere.controller;
+/*package com.bct.ficheCarriere.controller;
 
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -23,3 +23,4 @@ public class AuthenticationController {
 
     }
 }
+*/
