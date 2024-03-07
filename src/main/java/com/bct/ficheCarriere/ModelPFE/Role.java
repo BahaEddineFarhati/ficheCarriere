@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", insertable = false, updatable = false)
     private Long id;
     private String nom;
 

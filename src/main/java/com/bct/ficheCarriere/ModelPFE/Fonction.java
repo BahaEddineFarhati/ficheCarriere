@@ -21,8 +21,7 @@ public class Fonction {
     }
 
 
-    @ManyToMany(mappedBy = "Fonctions")
-    private Set<Employe> employees = new HashSet<>();
+
 
 
 
