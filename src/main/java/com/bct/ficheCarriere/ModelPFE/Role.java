@@ -18,7 +18,5 @@ public class Role {
     private Long id;
     private String nom;
 
-    @OneToMany()
-      private ArrayList<Utilisateur> idUtilisateur;
 
  }

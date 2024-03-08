@@ -1,14 +1,8 @@
 package com.bct.ficheCarriere.ModelPFE;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import java.util.*;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +23,14 @@ public class Grade {
 
 
     
- @OneToMany(mappedBy = "idGrade")
-private List<Employe> employes = new ArrayList<>();
+// @OneToMany(mappedBy = "idGrade")
+//private List<Employe> employes = new ArrayList<>();
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "Grade_Employe",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "matricule"))
+    private Set<Employe> employees = new HashSet<>();
+
 
 }

@@ -13,8 +13,7 @@ import java.util.ArrayList;
 public class Utilisateur extends Employe {
 
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false) // Change "role_id" to the actual column name in your database
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
-    @OneToMany()
-    private ArrayList<Historique> idHistorique;
+
 }

@@ -28,27 +28,28 @@ public class Employe {
     private Boolean disponibilitePourDesChangementsDePoste;
     private Boolean disponibilitePourDesDeplacements;
 
-    @OneToMany()
-    private ArrayList<FonctionEmployeKey> idFonction;
+    @ManyToMany(mappedBy = "Employees")
+    private Set<Fonction> fonctions = new HashSet<>();
 
-    @OneToMany()
-    private ArrayList<Publication> idPublication;
 
-    @OneToMany()
-    private ArrayList<ConferenceEmployeKey> idConference;
+//    @OneToMany()
+//    private ArrayList<ConferenceEmployeKey> idConference;
 
-    @OneToMany()
-    private ArrayList<ProjetEmployeKey> idProjet;
 
-    @OneToMany()
-    private ArrayList<FormationUniversitaireEmployeKey> idFormationUniv;
+    @ManyToMany(mappedBy = "Employees")
+    private Set<Conference> Conferences = new HashSet<>();
+
+    @ManyToMany(mappedBy = "Employees")
+    private Set<Projet> projets = new HashSet<>();
+
+    @ManyToMany(mappedBy = "Employees")
+    private Set<FormationUniversitaire> formationUniversitaires = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "idDepartement", nullable = false)
-    private Departement idDepartement;
+    private Departement departement;
 
-    @ManyToOne
-    @JoinColumn(name = "idGrade", nullable = false)
-    private Grade idGrade;
+    @ManyToMany(mappedBy = "employees")
+    private Set<Grade> grades = new HashSet<>();
     
 }

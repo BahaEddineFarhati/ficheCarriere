@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +20,10 @@ public class Fonction {
  private  Long id;
  private Date date;
  private String nom;
- @OneToMany()
-    private ArrayList<FonctionEmployeKey> idEmploye;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "Fonction_employe",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "matricule"))
+    private Set<Employe> Employees = new HashSet<>();
 }

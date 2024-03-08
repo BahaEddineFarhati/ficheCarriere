@@ -16,7 +16,5 @@ public class Departement {
     private Long id;
     private String abreviation;
     private String nom;
-@OneToMany()
-    private ArrayList<Employe> idEmploye;
 
 }
