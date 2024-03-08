@@ -1,9 +1,14 @@
 package com.bct.ficheCarriere.ModelPFE;
 
 import java.util.ArrayList;
-
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "Role")
 public class Role {
@@ -13,40 +18,7 @@ public class Role {
     private Long id;
     private String nom;
 
-     public Role(String nom) {
-         this.nom = nom;
-     }
-
-    public Role() {
-
-    }
-
-    public long getId() {
-         return id;
-     }
-
-     public String getNom() {
-         return nom;
-     }
-
-     public void setId(long id) {
-         this.id = id;
-     }
-
-     public void setNom(String nom) {
-         this.nom = nom;
-     }
-
-     @Override
-     public String toString() {
-         return "Role{" +
-                 "id=" + id +
-                 ", nom='" + nom + '\'' +
-                 '}';
-     }
     @OneToMany()
-      private ArrayList<Utilisateur> utilisateur;
-
-
+      private ArrayList<Utilisateur> idUtilisateur;
 
  }

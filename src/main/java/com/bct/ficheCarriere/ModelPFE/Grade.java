@@ -1,10 +1,22 @@
 package com.bct.ficheCarriere.ModelPFE;
 
-import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "Grade")
 public class Grade {
@@ -16,58 +28,8 @@ public class Grade {
     private String Service;
 
 
-    public Grade() {
+    
+ @OneToMany(mappedBy = "idGrade")
+private List<Employe> employes = new ArrayList<>();
 
-    }
-
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getDirection() {
-        return Direction;
-    }
-
-    public void setDirection(String direction) {
-        Direction = direction;
-    }
-
-    public String getService() {
-        return Service;
-    }
-
-    public void setService(String service) {
-        Service = service;
-    }
-
-    public Grade(Date date, String direction, String service) {
-        this.date = date;
-        Direction = direction;
-        Service = service;
-    }
-
-    @Override
-    public String toString() {
-        return "Grade{" +
-                "id=" + id +
-                ", date=" + date +
-                ", Direction='" + Direction + '\'' +
-                ", Service='" + Service + '\'' +
-                '}';
-    }
-    @OneToMany()
-    private ArrayList<GradeEmployeKey> employe;
 }

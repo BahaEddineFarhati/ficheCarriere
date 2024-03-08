@@ -1,5 +1,4 @@
 package com.bct.ficheCarriere.ModelPFE;
-
 import jakarta.persistence.*;
 
 
@@ -8,17 +7,17 @@ import jakarta.persistence.*;
 @Table(name = "FonctionEmployeKey ")
 
 public class FonctionEmployeKey {
-   @Id 
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Id 
+@GeneratedValue(strategy = GenerationType.IDENTITY)
 
-   private long id;
+private long id;
    
     @ManyToOne()
     @JoinColumn(name = "matricule")
     private Employe employe;
 
     @ManyToOne()
-    @JoinColumn(name="idfonction")
+    @JoinColumn(name="idFonction")
     private  Fonction fonction;
 
     

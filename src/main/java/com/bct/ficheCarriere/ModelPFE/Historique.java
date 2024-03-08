@@ -1,9 +1,14 @@
 package com.bct.ficheCarriere.ModelPFE;
-
+import java.util.ArrayList;
 import jakarta.persistence.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.Date;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "Historique ")
 public class Historique {
@@ -12,51 +17,8 @@ public class Historique {
     private  Long id;
     private Date date;
 
-    public Utilisateur getUtilisateur() {
-        return utilisateur;
-    }
 
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
-    }
-
-    
-
-    public Historique(Date date, Utilisateur utilisateur) {
-        this.date = date;
-        this.utilisateur = utilisateur;
-    }
-
-    public Historique() {
-
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    @Override
-    public String toString() {
-        return "Historique{" +
-                "id=" + id +
-                ", date=" + date +
-                ", utilisateur=" + utilisateur +
-                '}';
-    }
-
-    @ManyToOne
+ @ManyToOne
     @JoinColumn(name = "idUtilisateur", nullable = false)
     private Utilisateur utilisateur;
 }

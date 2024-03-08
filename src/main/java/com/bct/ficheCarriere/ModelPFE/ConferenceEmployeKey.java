@@ -1,15 +1,8 @@
 package com.bct.ficheCarriere.ModelPFE;
-
-
-
 import jakarta.persistence.*;
 
 
-
 @Entity
-@Table(name = "ConferenceEmployeKey")
-
-
 public class ConferenceEmployeKey   {
 
     @Id

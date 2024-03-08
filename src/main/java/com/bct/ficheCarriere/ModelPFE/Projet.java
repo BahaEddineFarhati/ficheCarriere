@@ -1,68 +1,24 @@
 package com.bct.ficheCarriere.ModelPFE;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
-
 import java.util.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "Projet")
 public class Projet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
-    private String Type;
-    private Date Date;
-    private String RoleProjet;
-
-    
-
-    public long getId() {
-        return Id;
-    }
-
-    public void setId(long id) {
-        Id = id;
-    }
-
-    public String getType() {
-        return Type;
-    }
-
-    public void setType(String type) {
-        Type = type;
-    }
-
-    public java.util.Date getDate() {
-        return Date;
-    }
-
-    public void setDate(java.util.Date date) {
-        Date = date;
-    }
-
-    public String getRoleProjet() {
-        return RoleProjet;
-    }
-    public void setRoleProjet(String roleProjet) {
-        RoleProjet = roleProjet;
-    }
-
-    public Projet(String type, java.util.Date date, String roleProjet) {
-        Type = type;
-        Date = date;
-        RoleProjet = roleProjet;
-    }
-    @Override
-    public String toString() {
-        return "Projet{" +
-                "Id=" + Id +
-                ", Type='" + Type + '\'' +
-                ", Date=" + Date +
-                ", RoleProjet='" + RoleProjet + '\'' +
-                '}';
-    }
+    private Long id;
+    private String type;
+    private Date date;
+    private String roleProjet;
 
     @OneToMany()
-    private ArrayList<ProjetEmployeKey> employe;
+    private ArrayList<ProjetEmployeKey> idEmploye;
 
 }

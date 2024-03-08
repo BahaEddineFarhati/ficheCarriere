@@ -1,82 +1,24 @@
 package com.bct.ficheCarriere.ModelPFE;
 
 import jakarta.persistence.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Entity
 @Table(name = "Publication")
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 
 public class Publication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long ID;
+    private long id;
     private Date date;
-    private String Nom;
+    private String nom;
     private String lien;
-
-    public Publication() {
-        
-    }
-
-
-    public Employe getEmploye() {
-        return employe;
-    }
-
-    public void setEmploye(Employe employe) {
-        this.employe = employe;
-    }
-
-
-    public long getID() {
-        return ID;
-    }
-
-    public void setID(long ID) {
-        this.ID = ID;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getNom() {
-        return Nom;
-    }
-
-    public void setNom(String nom) {
-        Nom = nom;
-    }
-
-    public String getLien() {
-        return lien;
-    }
-
-    public void setLien(String lien) {
-        this.lien = lien;
-    }
-
-    public Publication(Date date, String nom, String lien) {
-        this.date = date;
-        Nom = nom;
-        this.lien = lien;
-    }
-
-    @Override
-    public String toString() {
-        return "Publication{" +
-                "ID=" + ID +
-                ", date=" + date +
-                ", Nom='" + Nom + '\'' +
-                ", lien='" + lien + '\'' +
-                '}';
-    }
 
     @ManyToOne
     @JoinColumn(name = "Matricule", nullable = false)
