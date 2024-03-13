@@ -1,0 +1,367 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${employeeDetails.fName} + ' ' + ${employeeDetails.lName}"></title>
+    <link rel="stylesheet" type="text/css" href="/FicheCarriere/assets/css/cv.css"/>
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/styleContent.css">
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/boxicons.min.css">
+    <link rel="stylesheet" href="/FicheCarriere/assets/css/css/all.min.css">
+
+
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <style>
+        body {
+            padding-top: 30px; /* Adjust this value based on the height of your navbar */
+        }
+
+        .wrapper {
+            margin-top: 30px; /* Same value as body padding-top */
+        }
+    </style>
+</head>
+<body>
+<nav
+        class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed-top ">
+    <div class="container">
+        <div class="logo">
+            <img th:src="@{/assets/img/image_news_get.png}" alt="Logo"
+                 style="max-width: 200px; max-height: 200px;"/>
+        </div>
+        <div class="logo">
+            <a th:href="@{/listEmployees}"> <img
+                    th:src="@{/assets/img/logo.png}" alt="Logo"
+                    style="max-width: 200px; max-height: 200px;"/>
+            </a>
+            <a href="#" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </div>
+</nav>
+
+<div class="wrapper clearfix">
+
+    <div class="left">
+        <div class="name-hero">
+            <div class="me-img">
+                <img th:src="@{${imagePath}}" alt="Your Name"/>
+            </div>
+            <div class="name-text">
+
+                <h1><em th:text="${employeeDetails.getfName()}"></em> <em th:text="${employeeDetails.getlName()}"></em>
+                </h1>
+                <br>
+                <p><b>Email : </b> <a th:text="${employeeDetails.getContactDetails().getEmail()} "></a></p>
+                <p><b>Téléphone : </b> <a th:text="${employeeDetails.getContactDetails().getPhoneNumber()} "></a></p>
+
+                <p><b>Date de naissance : </b><a
+                        th:text="${employeeDetails.getBirthDate()} "></a></p>
+                <p><b>Date de prise de fonction : </b> <a
+                        th:text="${employeeDetails.getHireDate()} "></a></p>
+                <p><b>Adresse : </b><a th:text="${employeeDetails.getContactDetails().getStreet()} "></a> <a
+                        th:text="${employeeDetails.getContactDetails().getCity()} "></a></p>
+
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="right">
+        <div class="inner">
+            <section class="text-center "
+                     th:if="${employeeDetails.actualDepartment == 'null'}">
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualPosition} "></a> (Détaché(e))
+                </h1>
+            </section>
+            <section class="text-center "
+                     th:if="${employeeDetails.actualDepartment != 'null'}">
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualPosition} "></a>
+                </h1>
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualDepartment} "></a>
+                </h1>
+            </section>
+            <!-- **********************************************************************************************PROJECTS***************************************************************************-->
+            <div class="card">
+                <h5 class="card-header">Projets</h5>
+                <div class="card-body">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#addProjectModal"
+                            class="btn btn-primary float-right">Ajouter un projet
+                    </button>
+                    <div class="container mt-5" th:if="${!projects.isEmpty()}">
+                        <table class="table">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Type</th>
+                                <th>Role</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="projet: ${projects}">
+                                <td th:text="${projet.getProjectName()}"></td>
+                                <td th:text="${projet.getProjectType()}"></td>
+                                <td th:text="${projet.getEmployeeRole()}"></td>
+
+                                <td>
+                                    <button type="button" class="btn btn-outline-info"
+                                            th:projectName="${projet.getProjectName()}"
+                                            th:projectDescription="${projet.getProjectDescription()}"
+                                            th:projectType="${projet.getProjectType()}"
+                                            th:employeeRole="${projet.getEmployeeRole()}"
+                                            th:id="${projet.getId()}"
+                                            th:employeeId="${projet.getEmployeeId()}"
+                                            onclick="openConsultProjectModal(this)"><i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning"
+                                            th:projectName="${projet.getProjectName()}"
+                                            th:projectDescription="${projet.getProjectDescription()}"
+                                            th:projectType="${projet.getProjectType()}"
+                                            th:employeeRole="${projet.getEmployeeRole()}"
+                                            th:id="${projet.getId()}"
+                                            th:employeeId="${projet.getEmployeeId()}"
+                                            onclick="openEditProjectModal(this)"><i class="fas fa-edit"></i>
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-danger"
+                                            th:id="${projet.getId()}"
+                                            th:data="${projet.getEmployeeId()}"
+                                            onclick="deleteProject(this)"><i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="container mt-5" th:if="${projects == null or projects.size() == 0}">
+                        <p>Pas de projets.</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal fade" id="consultProjectModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier un projet</h5>
+                        </div>
+                        <div class="modal-body">
+                            <label for="editProjectName" class="form-check-label">Nom du projet:</label>
+                            <input type="text" class="form-control" id="consultProjectName" maxlength="50" required disabled/>
+                            <br/>
+
+                            <label for="editProjectDescription" class="form-label">Description du projet: </label>
+                            <textarea class="form-control" id="consultProjectDescription" disabled></textarea>
+
+                            <br/>
+                            <label for="projectType">type du project:</label>
+                            <select class="form-control" name="projectType" id="consultProjectType" disabled>
+                                <option value="" disabled selected>Choisir le type du projet</option>
+                                <option value="Projet Stratégique">Stratégique</option>
+                                <option value="Opérationnel">Opérationnel</option>
+                            </select>
+                            <br/>
+                            <label for="editEmployeeRole" class="form-label">Rôle du personnel: </label>
+                            <select class="form-control" name="employeeRole" id="consultEmployeeRole" disabled>
+                                <option value="" disabled selected>Choisir le role</option>
+                                <option value="Membre">Membre</option>
+                                <option value="Chef">Chef</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="addProjectModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ajouter un projet</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <form action="/FicheCarriere/project/insertProject" method="post" th:object="${projectObject}">
+                                <input type="hidden" th:field="*{employeeId}" th:value="${employeeDetails.getId()}"/>
+                                <label for="name" class="form-check-label">Nom du projet:</label>
+                                <input type="text" maxlength="50" class="form-control" id="name"
+                                       th:field="*{projectName}" required/>
+                                <br/>
+
+                                <label for="projectDescription" class="form-label">Description du projet: </label>
+                                <textarea type="text" class="form-control" id="projectDescription"
+                                          th:field="*{projectDescription}" ></textarea>
+
+
+                                <br/>
+                                <label class="form-label" for="addProjectType">Type du projet: </label>
+                                <select class="form-control" name="projectType" id="addProjectType">
+                                    <option value="" disabled selected>Choisir le type du projet </option>
+
+                                    <option value="Projet Stratégique">Stratégique</option>
+                                    <option value="Opérationnel">Opérationnel</option>
+                                </select>
+
+                                <br/>
+                                <label for="addEmployeeRole" class="form-label">Rôle du personnel: </label>
+                                <select class="form-control" name="employeeRole" id="addEmployeeRole">
+                                    <option value="" disabled selected>Choisir le role</option>
+
+                                    <option value="Membre">Membre</option>
+                                    <option value="Chef">Chef</option>
+                                </select>
+                                <br/>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="editProjectModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier un projet</h5>
+                        </div>
+                        <div class="modal-body">
+
+                            <input type="hidden" id="id"/>
+                            <label for="editProjectName" class="form-check-label">Nom du projet:</label>
+                            <input type="text" class="form-control" id="editProjectName" maxlength="50" required/>
+                            <br/>
+
+                            <label for="editProjectDescription" class="form-label">Description du projet: </label>
+                            <textarea class="form-control" id="editProjectDescription" ></textarea>
+
+                            <br/>
+                            <label for="projectType">Choose project type:</label>
+                            <select class="form-control" name="projectType" id="projectType">
+                                <option value="" disabled selected>Choisir le type du projet</option>
+                                <option value="Projet Stratégique">Stratégique</option>
+                                <option value="Opérationnel">Opérationnel</option>
+                            </select>
+                            <br/>
+                            <label for="editEmployeeRole" class="form-label">Rôle du personnel: </label>
+                            <select class="form-control" name="employeeRole" id="editEmployeeRole">
+                                <option value="" disabled selected>Choisir le role</option>
+                                <option value="Membre">Membre</option>
+                                <option value="Chef">Chef</option>
+                            </select>
+                            <br/>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button class="btn btn-outline-info" onclick="saveProjectData()">Sauvegarder</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/FicheCarriere/assets/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function openEditProjectModal(button) {
+        document.getElementById('id').value = button.getAttribute('id');
+        document.getElementById('editProjectName').value = button.getAttribute('projectName');
+        document.getElementById('editProjectDescription').value = button.getAttribute('projectDescription');
+        document.getElementById('projectType').value = button.getAttribute('projectType');
+        document.getElementById('editEmployeeRole').value = button.getAttribute('employeeRole');
+
+        console.log(projectType);
+        /*var radioButtons = document.getElementsByName('projectType');
+        for (var i = 0; i < radioButtons.length; i++) {
+            if (radioButtons[i].value === projectType) {
+                radioButtons[i].checked=true;}
+
+            }*/
+        $('#editProjectModal').modal('show');
+    }
+    function openConsultProjectModal(button) {
+        document.getElementById('consultProjectName').value = button.getAttribute('projectName');
+        document.getElementById('consultProjectDescription').value = button.getAttribute('projectDescription');
+        document.getElementById('consultProjectType').value = button.getAttribute('projectType');
+        document.getElementById('consultEmployeeRole').value = button.getAttribute('employeeRole');
+
+
+        /*var radioButtons = document.getElementsByName('projectType');
+        for (var i = 0; i < radioButtons.length; i++) {
+            if (radioButtons[i].value === projectType) {
+                radioButtons[i].checked=true;}
+
+            }*/
+        $('#consultProjectModal').modal('show');
+    }
+
+    function saveProjectData() {
+        // Get values from the input fields
+        var projectName = $('#editProjectName').val();
+        var projectDescription = $('#editProjectDescription').val();
+        var id = $('#id').val();
+        var employeeId = $('#employeeId').val();
+        var projectType = $('#projectType').val();
+        var employeeRole = $('#editEmployeeRole').val();
+        console.log(projectType)
+        /*var projectType;
+        for (var i = 0; i < radioButtons.length; i++) {
+            if (radioButtons[i].checked) {
+                console.log("Selected Value: " + radioButtons[i].value);
+                projectType = radioButtons[i].value;
+            }
+        }*/
+        // Create an object with the data
+        var data = {
+            projectName:projectName ,
+            projectDescription: projectDescription,
+            projectType: projectType,
+            id: id,
+            employeeId: employeeId,
+            employeeRole: employeeRole
+        };
+
+        // Make an AJAX request to the controller
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/project/updateProject',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/project/projectForm?id=' + employeeId;
+            }
+        });
+    }
+
+    function deleteProject(button) {
+        var id= button.getAttribute('id');
+        var employeeId = $('#employeeId').val();
+
+        var data = {
+            id: id,
+            employeeId: employeeId
+        };
+
+        $.ajax({
+            type: 'POST',  // Use 'POST' or 'GET' depending on your server setup
+            url: '/FicheCarriere/project/deleteProject',  // Replace with the actual endpoint
+            data: data,
+            success: function (response) {
+                window.location.href = '/FicheCarriere/project/projectForm?id=' + employeeId;
+            }
+        });
+    }
+</script>
+</body>
+
+</html>
+
+
+

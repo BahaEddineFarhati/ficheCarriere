@@ -1,0 +1,540 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${employeeDetails.fName} + ' ' + ${employeeDetails.lName}"></title>
+    <link href="/FicheCarriere/assets/css/cv.css" rel="stylesheet" type="text/css"/>
+    <link href="/FicheCarriere/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/FicheCarriere/assets/css/styleContent.css" rel="stylesheet">
+    <link href="/FicheCarriere/assets/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet"  href="/FicheCarriere/assets/css/css/all.min.css">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <style>
+        body {
+            padding-top: 30px; /* Adjust this value based on the height of your navbar */
+        }
+
+        .wrapper {
+            margin-top: 30px; /* Same value as body padding-top */
+        }
+    </style>
+</head>
+<body>
+<nav
+        class="navbar navbar-expand-md navbar-light bg-white shadow-sm fixed-top ">
+    <div class="container">
+        <div class="logo">
+            <img alt="Logo" style="max-width: 200px; max-height: 200px;"
+                 th:src="@{/assets/img/image_news_get.png}"/>
+        </div>
+        <div class="logo">
+            <a th:href="@{/listEmployees}"> <img
+                    alt="Logo" style="max-width: 200px; max-height: 200px;"
+                    th:src="@{/assets/img/logo.png}"/>
+            </a>
+            <a href="#" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </div>
+</nav>
+
+<div class="wrapper clearfix">
+    <div class="left">
+        <div class="name-hero">
+            <div class="me-img">
+                <img alt="Your Name" th:src="@{${imagePath}}"/>
+            </div>
+            <div class="name-text">
+
+                <h1><em th:text="${employeeDetails.getfName()}"></em> <em th:text="${employeeDetails.getlName()}"></em>
+                </h1>
+                <br>
+                <p><b>Email : </b> <a th:text="${employeeDetails.getContactDetails().getEmail()} "></a></p>
+                <p><b>Téléphone : </b> <a th:text="${employeeDetails.getContactDetails().getPhoneNumber()} "></a></p>
+
+                <p><b>Date de naissance : </b><a
+                        th:text="${employeeDetails.getBirthDate()} "></a></p>
+                <p><b>Date de prise de fonction : </b> <a
+                        th:text="${employeeDetails.getHireDate()} "></a></p>
+                <p><b>Adresse : </b><a th:text="${employeeDetails.getContactDetails().getStreet()} "></a> <a
+                        th:text="${employeeDetails.getContactDetails().getCity()} "></a></p>
+
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="right">
+        <div class="inner">
+            <br>
+            <!--HEADER-->
+            <section class="text-center " th:if="${employeeDetails.actualDepartment == 'null'}">
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualPosition} "></a> (Détaché(e))
+                </h1>
+            </section>
+            <section class="text-center " th:if="${employeeDetails.actualDepartment != 'null'}">
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualPosition} "></a>
+                </h1>
+                <h1 class="display-4">
+                    <a th:text="${employeeDetails.actualDepartment} "></a>
+                </h1>
+            </section>
+            <!--RESPONSABILITY-->
+            <div class="container" th:if="${responsability.getDescription() != null}">
+                <h3>Responsabilités:</h3>
+                <p th:text="${responsability.getDescription()}"></p>
+                <hr/>
+            </div>
+            <!--POSITIONS-->
+            <div class="container" th:if="${!employeeDetails.getPositionsList().isEmpty()}">
+                <h3>Grades</h3>
+                <div class="row">
+                    <div class="col-2">
+                        <p th:text="${employeeDetails.getPositionsList().get(0).getDate()} "></p>
+                    </div>
+                    <div class="col-4 text-secondary">
+                        <a th:text="${employeeDetails.getPositionsList().get(0).getFunctionName()} "></a>
+
+                        <p>
+                            <b>Promotion: </b><a
+                                th:text="${employeeDetails.getPositionsList().get(0).getPromotionType()} "></a>
+                        </p>
+                    </div>
+                    <div class="col-4 text-secondary">
+
+                        <em th:text="${employeeDetails.getPositionsList().get(0).getDepartment()} "></em>
+                        <p th:text="${employeeDetails.getPositionsList().get(0).getService()} "></p>
+                    </div>
+                    <div class="col-2"
+                         th:if="${employeeDetails.positionsList.isEmpty() or employeeDetails.positionsList.size() ==1}">
+                        <button class="btn btn-outline-dark" disabled>voir plus</button>
+                    </div>
+                    <div class="col-2"
+                         th:unless="${employeeDetails.positionsList.isEmpty() or employeeDetails.positionsList.size() ==1}">
+                        <button class="btn btn-outline-dark" onclick="openPositionModal()">voir plus</button>
+                    </div>
+                    <p th:if="${employeeDetails.getPositionsList() == null or employeeDetails.getPositionsList().size() == 0}">
+                        pas encore rempli</p>
+                </div>
+                <hr/>
+            </div>
+            <div class="modal fade" id="positionModal">
+                <div class=" modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Grades</h5>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Date grade</th>
+                                    <th>Grade</th>
+                                    <th>Direction</th>
+                                    <th>Service</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="position, rowStat : ${positions}">
+                                    <td th:text="${position.getDate()}"></td>
+                                    <td th:text="${position.getFunctionName()}"></td>
+                                    <td th:text="${position.getDepartment()}"></td>
+                                    <td th:text="${position.getService()}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--FUNCTIONS-->
+            <div class="container" th:if="${!employeeDetails.getFunctionsList().isEmpty()}">
+                <h3>Fonctions</h3>
+                <div class="row">
+                    <div class="col-2">
+                        <p th:text="${employeeDetails.getFunctionsList().get(0).getDate()} "></p>
+                    </div>
+                    <div class="col-4 text-secondary" th:if="${!employeeDetails.getFunctionsList().isEmpty()}">
+                        <a th:text="${employeeDetails.getFunctionsList().get(0).getFunctionName()} "></a>
+
+                    </div>
+                    <div class="col-4 text-secondary" th:if="${!employeeDetails.getFunctionsList().isEmpty()}">
+
+                        <em th:text="${employeeDetails.getFunctionsList().get(0).getDepartment()} "></em>
+                        <p th:text="${employeeDetails.getFunctionsList().get(0).getService()} "></p>
+                    </div>
+                    <div class="col-2"
+                         th:if="${employeeDetails.functionsList.isEmpty() or employeeDetails.functionsList.size() ==1}">
+                        <button class="btn btn-outline-dark" disabled>voir plus</button>
+                    </div>
+                    <div class="col-2"
+                         th:unless="${employeeDetails.functionsList.isEmpty() or employeeDetails.functionsList.size() ==1}">
+                        <button class="btn btn-outline-dark" onclick="openFunctionModal()">voir plus</button>
+                    </div>
+                    <p th:if="${employeeDetails.functionsList == null or employeeDetails.functionsList.size() == 0}">pas
+                        encore rempli</p>
+
+
+                </div>
+                <hr/>
+            </div>
+            <div class="modal fade" id="functionModal">
+                <div class=" modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Fonctions</h5>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Date fonction</th>
+                                    <th>Grade</th>
+                                    <th>Direction</th>
+                                    <th>Service</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="fonction, rowStat : ${functions}">
+                                    <td th:text="${fonction.getDate()}"></td>
+                                    <td th:text="${fonction.getFunctionName()}"></td>
+                                    <td th:text="${fonction.getDepartment()}"></td>
+                                    <td th:text="${fonction.getService()}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--FORMATION-->
+            <div class="container" th:if="${!employeeDetails.getFormationsList().isEmpty()}">
+                <h3>Formations</h3>
+                <div class="row">
+                    <div class="col-10">
+                        <em th:text="${employeeDetails.getFormationsList().get(0).getDiploma()}"></em>
+                        <p th:text="${employeeDetails.getFormationsList().get(0).getLevel()}"></p>
+                    </div>
+
+                    <div class="col-2">
+                        <button class="btn btn-outline-dark" onclick="openFormationModal(this)">voir plus</button>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+            <div class="modal fade" id="formationModal">
+                <div class=" modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Formations</h5>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Nom</th>
+                                    <th>Date de début</th>
+                                    <th>Date de fin</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="formation, rowStat : ${employeeDetails.formationsList}">
+                                    <td th:text="${formation.getLevel()}"></td>
+                                    <td th:text="${formation.getDiploma()}"></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr th:each="training, rowStat : ${trainings}">
+                                    <td th:text="${training.getTrainingType()}"></td>
+                                    <td th:text="${training.getTrainingDescription()}"></td>
+                                    <td th:text="${training.getTrainingBeginDate()}"></td>
+                                    <td th:text="${training.getTrainingEndDate()}"></td>
+                                </tr>
+                                <tr th:each="certif, rowStat : ${certifs}">
+                                    <td> Certification</td>
+                                    <td th:text="${certif.getCertifTitle()}"></td>
+                                    <td></td>
+                                    <td th:text="${certif.getCertifDate()}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--PROJECTS-->
+            <div class="container" th:if="${!projects.isEmpty()}">
+                <h3>Projets</h3>
+                <div class="row">
+                    <div class="col-2">
+                        <h6>Type projet</h6>
+                        <p th:text="${projects.get(0).getProjectType()} "></p>
+                    </div>
+                    <div class="col-4 ">
+                        <h6>Nom projet</h6>
+                        <p th:text="${projects.get(0).getProjectName()} "></p>
+
+                    </div>
+                    <div class="col-4 ">
+                        <h6>Role</h6>
+                        <p th:text="${projects.get(0).getEmployeeRole()} "></p>
+                    </div>
+                    <div class="col-2"
+                         th:if="${projects.isEmpty() or projects.size() ==1}">
+                        <button class="btn btn-outline-dark" disabled>voir plus</button>
+                    </div>
+                    <div class="col-2"
+                         th:unless="${projects.isEmpty() or projects.size() ==1}">
+                        <button class="btn btn-outline-dark" onclick="openProjectModal()">voir plus</button>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+            <div class="modal fade" id="projectModal">
+                <div class=" modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Projets</h5>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Type projet</th>
+                                    <th>Nom projet</th>
+                                    <th>Role</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="project, rowStat : ${projects}">
+                                    <td th:text="${project.getProjectType()}"></td>
+                                    <td th:text="${project.getProjectName()}"></td>
+                                    <td th:text="${project.getEmployeeRole()}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--PUBLICATIONS-->
+            <div class="container" th:if="${!publications.isEmpty()}">
+                <h3>Publications</h3>
+                <div class="row">
+                    <div class="col-2">
+                        <h6>Date</h6>
+                        <p th:text="${publications.get(0).getPublicationDate()} "></p>
+                    </div>
+                    <div class="col-4 ">
+                        <h6>Nom publication</h6>
+                        <p th:text="${publications.get(0).getPublicationName()} "></p>
+
+                    </div>
+                    <div class="col-4 ">
+                        <h6>Lien</h6>
+                        <a target="_blank"
+                           th:href="${publications.get(0).publicationLink}"
+                           th:if="${publications.get(0).publicationLink != '' }">Voir la publication</a>
+                    </div>
+                    <div class="col-2"
+                         th:if="${publications.isEmpty() or publications.size() ==1}">
+                        <button class="btn btn-outline-dark" disabled>voir plus</button>
+                    </div>
+                    <div class="col-2"
+                         th:unless="${publications.isEmpty() or publications.size() ==1}">
+                        <button class="btn btn-outline-dark" onclick="openPublicationModal()">voir plus</button>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+            <div class="modal fade" id="publicationModal">
+                <div class=" modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Publications</h5>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Nom publication</th>
+                                    <th>Lien</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="publication, rowStat : ${publications}">
+                                    <td th:text="${publication.getPublicationDate()}"></td>
+                                    <td th:text="${publication.getPublicationName()}"></td>
+                                    <td><a target="_blank"
+                                           th:href="${publications.get(0).publicationLink}"
+                                           th:if="${publications.get(0).publicationLink != '' }">Voir la
+                                        publication</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--CONFERENCES-->
+            <div class="container" th:if="${!conferences.isEmpty()}">
+                <h3>Conferences</h3>
+                <div class="row">
+                    <div class="col-2">
+                        <h6>Date</h6>
+                        <p th:text="${conferences.get(0).getConferenceDate()} "></p>
+                    </div>
+                    <div class="col-4 ">
+                        <h6>Nom conference</h6>
+                        <p th:text="${conferences.get(0).getConferenceName()} "></p>
+
+                    </div>
+                    <div class="col-2 ">
+                        <h6>Pays</h6>
+                        <p th:text="${conferences.get(0).getConferenceCountry()} "></p>
+                    </div>
+                    <div class="col-2 ">
+                        <h6>Sujet</h6>
+                        <p th:text="${conferences.get(0).getConferenceSubject()} "></p>
+                    </div>
+
+                    <div class="col-2"
+                         th:if="${conferences.isEmpty() or conferences.size() ==1}">
+                        <button class="btn btn-outline-dark" disabled>voir plus</button>
+                    </div>
+                    <div class="col-2"
+                         th:unless="${conferences.isEmpty() or conferences.size() ==1}">
+                        <button class="btn btn-outline-dark" onclick="openConferenceModal()">voir plus</button>
+                    </div>
+                    <p th:if="${conferences == null or conferences.size() == 0}">pas encore rempli</p>
+                </div>
+                <hr/>
+            </div>
+            <div class="modal fade" id="conferenceModal">
+                <div class=" modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Conferences</h5>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Date</th>
+                                    <th>Pays</th>
+                                    <th>Sujet</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="conference, rowStat : ${conferences}">
+                                    <td th:text="${conference.getConferenceName()}"></td>
+                                    <td th:text="${conference.getConferenceDate()}"></td>
+                                    <td th:text="${conference.getConferenceCountry()}"></td>
+                                    <td th:text="${conference.getConferenceSubject()}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--LANGUAGES-->
+            <div class="container" th:if="${!languages.isEmpty()}">
+                <h3>Langues</h3>
+                <div class="row" th:each="langue: ${languages}">
+                    <div class="col-6">
+                        <p th:text="${langue.getLanguage()} "></p>
+                    </div>
+                    <div class="col-6 ">
+                        <p th:text="${langue.getLanguageLevel()}"></p>
+                    </div>
+                </div>
+                </hr>
+            </div>
+            <!--MOBILITY-->
+            <div class="container" th:if="${mobility.getChangementDispo() != null and mobility.getMovementDispo() != null and mobility.getAbroadDispo() !=null}">
+                <h3>Mobilité</h3>
+                <div class="row" th:if="${mobility.getAbroadDispo() !=null}">
+                    <div class="col-6">
+                        <p>Disponibilité pour des missions à l'étranger:</p></div>
+                    <div class="col-6">
+                        <p th:text="${mobility.getAbroadDispo()} "></p></div>
+                </div>
+                <div class="row" th:if="${mobility.getMovementDispo() != null}">
+                    <div class="col-6">
+                        <p>Disponibilité pour des déplacements:</p></div>
+                    <div class="col-6">
+
+                        <p th:text="${mobility.getMovementDispo()} "></p></div>
+                </div>
+                <div class="row" th:if="${mobility.getChangementDispo() != null}">
+                    <div class="col-6">
+                        <p>Disponibilité pour des changements de poste:</p>
+                    </div>
+                    <div class="col-6">
+                        <p th:text="${mobility.getChangementDispo()} "></p>
+                    </div>
+                </div>
+                <hr/>
+            </div>
+            <!--REWARD-->
+            <div class="container" th:if="${reward.getDescription() != null}">
+                <h3>Récompenses et reconnaissances:</h3>
+                <p th:text="${reward.getDescription()}"></p>
+                <hr/>
+            </div>
+            <!--SKILLS-->
+            <div class="container" th:if="${!skills.isEmpty() and !iTskills.isEmpty()}">
+                <h3>Compétences technique</h3>
+                <br/>
+                <ul class="skill-set" th:if="${!skills.isEmpty()}" >
+                    <li th:each="skill : ${skills}">
+                        <span th:text="${skill.getSkill()}"></span>
+                    </li>
+                </ul>
+                <h3>Outils informatique maitrisés</h3>
+                <ul class="skill-set" th:if="${!iTskills.isEmpty()}">
+                    <li th:each="iTskill : ${iTskills}">
+                        <span th:text="${iTskill.getSkill()}"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function openFormationModal(button) {
+        $('#formationModal').modal('show');
+    }
+    function openFunctionModal() {
+        $('#functionModal').modal('show');
+    }
+    function openPositionModal() {
+        $('#positionModal').modal('show');
+    }
+    function openProjectModal() {
+
+        $('#projectModal').modal('show');
+    }
+    function openPublicationModal() {
+
+        $('#publicationModal').modal('show');
+    }
+    function openConferenceModal() {
+
+        $('#conferenceModal').modal('show');
+    }
+</script>
+</body>
+
+</html>

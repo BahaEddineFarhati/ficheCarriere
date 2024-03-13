@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche carrière</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"  th:href="@{/assets/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" type="text/css"  th:href="@{/assets/css/jquery.dataTables.css}">
+    <link rel="stylesheet"  th:href="@{/assets/css/css/all.min.css}">
+    <link href=https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css rel="stylesheet" />
+
+    <style>
+        .circular-img {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+ 
+    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm  ">
+      <div class="container">
+        <div class="logo">
+          <img th:src="@{/assets/img/image_news_get.png}" alt="Logo" style="max-width: 200px; max-height: 200px;" />
+        </div>
+                  <div class="logo">
+
+          <img th:src="@{/assets/img/logo.png}" alt="Logo" style="max-width: 200px; max-height: 200px;" />
+                      <a href="#" th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i></a>
+         </div>
+
+      </div>
+  </nav> 
+    
+   
+    
+    <main class="py-4">
+
+        <div class="container">
+
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+        <table class="table table-bordered table-striped" id="dataTable">
+            <thead>
+                <tr>
+                    
+                    <th><input class="form-control" type="text" id="matriculeFilter" placeholder="Filtre Matricule"></th>
+                    <th><input  class="form-control" type="text" id="nomFilter" placeholder="Filtre Nom"></th>
+                    <th><input class="form-control" type="text" id="prenomFilter" placeholder="Filtre Prenom"></th>
+                    <th>
+                        <select class="custom-select" id="fonctionFilter">
+                            <option value="">Tous</option>
+                                                           <option th:each="function : ${listFunctions}" th:value="${function}" th:text="${function}"></option>
+                            <option value="Pas de fonction">Pas de fonction</option>
+
+                            <!-- Add more options as needed -->
+                        </select>
+                    </th>
+                    <th>
+                        <select class="custom-select" id="departementFilter">
+                            <option value="">Tous</option>
+                                <option th:each="department : ${listDepartments}" th:value="${department}" th:text="${department}"></option>
+								<option value="Non affecté(e)">Non affecté(e)</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </th>
+                    <th></th>
+                </tr>
+                <tr>
+                   
+                    <th>Matricule</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Fonction</th>
+                    <th>Département</th>
+                    <th></th>                  
+                </tr>
+            
+            </thead>
+            <tbody>
+                <!-- Add your table data here -->
+                <!-- Sample rows -->
+                
+                <tr th:each="employee, rowStat : ${listEmployees}">   
+                    <td th:text="${employee.id}"></td>
+                    <td th:text="${employee.firstName}"></td>
+                    <td th:text="${employee.LastName}"></td>
+                    <td th:text="${employee.function}"></td>
+                    <td th:text="${employee.department}"></td>
+                	 <td>
+                        <div class="container">
+                            <button sec:authorize="hasRole('CONS')" type="button" class="btn btn-outline-info" th:value="${employee.id}"
+                            onclick=showPrintPage(this)>
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                         <div class="container">
+                             <button sec:authorize="hasRole('STUDY')" type="button" class="btn btn-outline-info" th:value="${employee.id}"
+                                     onclick=showStudyForm(this)>
+                                 <i class="fas fa-edit"></i>
+                             </button>
+                         </div>
+                         <div class="container">
+                             <button sec:authorize="hasRole('PROJECT')" type="button" class="btn btn-outline-info" th:value="${employee.id}"
+                                     onclick=showProjectForm(this)>
+                                 <i class="fas fa-edit"></i>
+                             </button>
+                         </div>
+                         <div class="container">
+                             <button sec:authorize="hasRole('RH')" type="button" class="btn btn-outline-info" th:value="${employee.id}"
+                                     onclick=showRhForm(this)>
+                                 <i class="fas fa-edit"></i>
+                             </button>
+                         </div>
+                    </td>
+                </tr>
+                
+                
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script type="text/javascript" th:src="@{/assets/js/jquery-3.6.0.min.js}" ></script>
+    <script type="text/javascript" th:src="@{/assets/js/jquery.dataTables.min.js}"></script>
+    
+    <script src=https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js></script>
+
+    <script>
+        $(document).ready(function () {
+        	$('#departementFilter').select2();
+            $('#fonctionFilter').select2();
+            var table = $('#dataTable').DataTable({
+                
+                "columnDefs": [{
+                    "targets": 5,
+                    "orderable": false
+                }],
+                "language": {
+            "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json" // Update this path to the location where you saved the French language file
+        } 
+                
+            });
+            
+
+            // Apply individual column filtering
+            $('#matriculeFilter').on('keyup', function () {
+                table.column(0).search(this.value).draw();
+            });
+
+            $('#nomFilter').on('keyup', function () {
+                table.column(1).search(this.value).draw();
+            });
+
+            $('#prenomFilter').on('keyup', function () {
+                table.column(2).search(this.value).draw();
+            });
+
+            $('#fonctionFilter').on('change', function () {
+                var val = $.fn.dataTable.util.escapeRegex(
+                    $(this).val()
+                );
+                table.column(3).search(val ? '^' + val + '$' : '', true, false).draw();
+            });
+
+            $('#departementFilter').on('change', function () {
+                var val = $.fn.dataTable.util.escapeRegex(
+                    $(this).val()
+                );
+                table.column(4).search(val ? '^' + val + '$' : '', true, false).draw();
+            });
+
+            // Apply global search
+            $('#globalFilter').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+    </script>
+    <script th:inline="javascript">
+	function showPrintPage(button) {
+        window.location.href = '/FicheCarriere/employeeDetails?id='+button.value;
+	}
+    function showStudyForm(button) {
+        window.location.href = '/FicheCarriere/study/studyForm?id='+button.value;
+    }
+    function showProjectForm(button) {
+        window.location.href = '/FicheCarriere/project/projectForm?id='+button.value;
+    }
+    function showRhForm(button) {
+        window.location.href = '/FicheCarriere/rh/rhForm?id='+button.value;
+    }
+	</script>
+    
+</body>
+
+</html>
