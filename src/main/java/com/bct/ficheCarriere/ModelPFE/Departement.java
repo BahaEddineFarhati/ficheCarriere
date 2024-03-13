@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "departement ")
 public class Departement {
@@ -18,16 +18,6 @@ public class Departement {
     private String nom;
     
  
-
-
-    public Departement( String abreviation, String nom) {
-        this.abreviation = abreviation;
-        this.nom = nom;
-    }
-
-    public Departement() {
-    }
-
 
 
 }
