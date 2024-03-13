@@ -1,4 +1,5 @@
 package com.bct.ficheCarriere.ModelPFE;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 import java.util.*;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "Employe")
 public class Employe {
     @jakarta.persistence.Id
@@ -35,7 +36,7 @@ public class Employe {
 //    @OneToMany()
 //    private ArrayList<ConferenceEmployeKey> idConference;
 
-
+    @JsonManagedReference
     @ManyToMany(mappedBy = "Employees")
     private Set<Conference> Conferences = new HashSet<>();
 
