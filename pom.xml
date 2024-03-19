@@ -78,12 +78,6 @@
 			<version>4.0.1</version> <!-- Use the appropriate version -->
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>arij.project</groupId>
-			<artifactId>DS1</artifactId>
-			<version>1.0</version>
-		</dependency>
 	</dependencies>
 
 	<build>

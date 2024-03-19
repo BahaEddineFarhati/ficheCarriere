@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -33,12 +34,15 @@ public class Conference {
 //    private ArrayList<ConferenceEmployeKey> idEmploye;
 
 
-
+    
+    
+    
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "Conference_employe",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "matricule"))
-    private Set<Employe> Employees = new HashSet<>();
+    private List<Employe> Employees = new ArrayList<>();
 
 
 

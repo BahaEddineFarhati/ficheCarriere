@@ -1,74 +1,56 @@
 package com.bct.ficheCarriere.Controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.bct.ficheCarriere.ModelPFE.Conference;
-import com.bct.ficheCarriere.Repositories.ConferenceRepository;
+import com.bct.ficheCarriere.service.ConferenceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/conferences")
-
-
 public class ConferenceController {
-
-	    @Autowired
-	    private ConferenceRepository conferenceRepository;
-
-	  
-	    @GetMapping
-	    public List<Conference> getAllConferences() {
-	        return conferenceRepository.findAll();
-	    }
-
-	   
-	    @GetMapping("/{id}")
-	    public ResponseEntity<Conference> getConferenceById(@PathVariable Long id) {
-	        return conferenceRepository.findById(id)
-	                .map(ResponseEntity::ok)
-	                .orElse(ResponseEntity.notFound().build());
-	    }
-
-	
-	    @PostMapping
-	    public ResponseEntity<Conference> createConference(@RequestBody Conference conference) {
-	        Conference savedConference = conferenceRepository.save(conference);
-	        return ResponseEntity.ok(savedConference);
-	    }
-
-	   
-	    @PutMapping("/{id}")
-	    public ResponseEntity<Conference> updateConference(@PathVariable Long id, @RequestBody Conference conference) {
-	        if (conferenceRepository.existsById(id)) {
-	            conference.setId(id);
-	            Conference updatedConference = conferenceRepository.save(conference);
-	            return ResponseEntity.ok(updatedConference);
-	        } else {
-	            return ResponseEntity.notFound().build();
-	        }
-	    }
-
-	  
-	    @DeleteMapping("/{id}")
-	    public ResponseEntity<Void> deleteConference(@PathVariable Long id) {
-	        if (conferenceRepository.existsById(id)) {
-	            conferenceRepository.deleteById(id);
-	            return ResponseEntity.noContent().build();
-	        } else {
-	            return ResponseEntity.notFound().build();
-	        }
-	    }
-	}
+	   @Autowired
+    private  ConferenceService conferenceService;
 
 
+    public ConferenceController(ConferenceService conferenceService) {
+        this.conferenceService = conferenceService;
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Conference> getConferenceById(@PathVariable Long id) {
+        Optional<Conference> conference = conferenceService.getConferenceById(id);
+        return conference.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
+    // Endpoint to get all conferences
+    @GetMapping
+    public ResponseEntity<List<Conference>> getAllConferences() {
+        List<Conference> conferences = conferenceService.getAllConferences();
+        return new ResponseEntity<>(conferences, HttpStatus.OK);
+    }
+
+    // Endpoint to create or update a conference
+    @PostMapping
+    public ResponseEntity<Conference> saveOrUpdateConference(@RequestBody Conference conference) {
+        Conference savedConference = conferenceService.saveOrUpdateConference(conference);
+        return new ResponseEntity<>(savedConference, HttpStatus.CREATED);
+    }
+
+    // Endpoint to delete a conference by its ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteConferenceById(@PathVariable Long id) {
+        conferenceService.deleteConferenceById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @PutMapping("/{confId}/Employe/{empId}")
+    public Conference employe_conf(
+            @PathVariable Long empId,
+            @PathVariable Long confId
+    ) {
+        return conferenceService.employe_conf(empId, confId);
+    }
+}

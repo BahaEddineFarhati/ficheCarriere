@@ -1,79 +1,70 @@
 package com.bct.ficheCarriere.Controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.bct.ficheCarriere.ModelPFE.Employe;
-import com.bct.ficheCarriere.Repositories.EmployeRepository;
+import com.bct.ficheCarriere.service.EmployeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-
+import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/Employe")
+@RequestMapping("/api/employes")
 public class EmployeesController {
 
-//    private final Departement d = new Departement("SI","SI");
-//    Date currentDate = new Date();
-//    private final Employe testEmpl1 = new Employe("1","Farhati","Baha","img1","baha@mail.tn",currentDate,"adresse","test","test",true,true,false,d) ;
-	  @Autowired
-      private EmployeRepository employeRepository;
-   
-  /*  @GetMapping
-    public String getEmploye () {
-        return "Serveur yakhdem !";}
-  */  
-    
+    @Autowired
+    private EmployeService employeService;
 
-       
-        @GetMapping
-        public List<Employe> getAllEmployees() {
-            return employeRepository.findAll();
-        }
-
-        @GetMapping("/{matricule}")
-        public ResponseEntity<Employe> getEmployeeByMatricule(@PathVariable String matricule) {
-            return employeRepository.findById(matricule)
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
-        }
-
-        @PostMapping
-        public ResponseEntity<Employe> createEmployee(@RequestBody Employe employe) {
-            Employe savedEmployee = employeRepository.save(employe);
-            return ResponseEntity.ok(savedEmployee);
-        }
-
-      
-        @PutMapping("/{matricule}")
-        public ResponseEntity<Employe> updateEmployee(@PathVariable String matricule, @RequestBody Employe employe) {
-            if (employeRepository.existsById(matricule)) {
-                employe.setMatricule(matricule);
-                Employe updatedEmployee = employeRepository.save(employe);
-                return ResponseEntity.ok(updatedEmployee);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        }
-
-        @DeleteMapping("/{matricule}")
-        public ResponseEntity<Void> deleteEmployee(@PathVariable String matricule) {
-            if (employeRepository.existsById(matricule)) {
-                employeRepository.deleteById(matricule);
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        }
+    @PostMapping("/{id}")
+    public ResponseEntity<Employe> saveEmploye(@RequestBody Employe employe) {
+        Employe savedEmploye = employeService.saveEmploye(employe);
+        return new ResponseEntity<>(savedEmploye, HttpStatus.CREATED);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Employe>> getAllEmployes() {
+        List<Employe> employes = employeService.getAllEmployes();
+        return new ResponseEntity<>(employes, HttpStatus.OK);
+    }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Employe> getEmployeById(@PathVariable Long id) {
+        Optional<Employe> employe = employeService.getEmployeById(id);
+        return employe.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEmployeById(@PathVariable Long id) {
+        employeService.deleteEmployeById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Employe> updateEmploye(@PathVariable Long id, @RequestBody Employe employe) {
+        Optional<Employe> existingEmploye = employeService.getEmployeById(id);
+        if (existingEmploye.isPresent()) {
+            employe.setId(id);
+            Employe updatedEmploye = employeService.updateEmploye(employe);
+            return new ResponseEntity<>(updatedEmploye, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    
+    
+    @GetMapping("/test/{employeeId}")
+    public ResponseEntity<Employe> getEmployeeWithConferences(@PathVariable Long employeeId) {
+        Optional<Employe> employeeOptional = employeService.getEmployeeWithConferences(employeeId);
+        if (employeeOptional.isPresent()) {
+            return ResponseEntity.ok(employeeOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    
+}
