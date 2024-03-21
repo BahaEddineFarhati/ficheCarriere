@@ -46,11 +46,5 @@ public class ConferenceController {
         conferenceService.deleteConferenceById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    @PutMapping("/{confId}/Employe/{empId}")
-    public Conference employe_conf(
-            @PathVariable Long empId,
-            @PathVariable Long confId
-    ) {
-        return conferenceService.employe_conf(empId, confId);
-    }
+   
 }

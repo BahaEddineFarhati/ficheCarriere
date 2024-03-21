@@ -6,6 +6,7 @@ import com.bct.ficheCarriere.Repositories.EmployeRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +34,24 @@ public class EmployeService {
         	EmployeRepository.deleteById(id);
         }
 
-        public Employe updateEmploye(Employe employe) {
-            return EmployeRepository.save(employe);
+        public Employe updateEmploye(Long employeId, Employe employeUpdates) {
+                Optional<Employe> optionalEmploye = EmployeRepository.findById(employeId);
+
+                if (optionalEmploye.isPresent()) {
+                    Employe existingEmploye = optionalEmploye.get();
+                    
+                    // Update only non-null properties
+                    BeanUtils.copyProperties(employeUpdates, existingEmploye, "id");
+                    
+                    // Save the updated employe
+                    return EmployeRepository.save(existingEmploye);
+                } else {
+                    // Handle the case where the employe with the given ID is not found
+                    throw new RuntimeException("Employe not found with id: " + employeId);
+                }
+            
         }
+        
         
         
         public Optional<Employe> getEmployeeWithConferences(Long employeeId) {
