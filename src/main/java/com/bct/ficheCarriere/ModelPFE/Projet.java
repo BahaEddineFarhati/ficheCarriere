@@ -9,7 +9,6 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Projet")
 public class Projet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

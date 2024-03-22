@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "departement ")
 public class Departement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

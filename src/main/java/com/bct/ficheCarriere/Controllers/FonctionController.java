@@ -1,8 +1,10 @@
 package com.bct.ficheCarriere.Controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,58 +17,50 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bct.ficheCarriere.ModelPFE.Fonction;
 import com.bct.ficheCarriere.Repositories.FonctionRepository;
+import com.bct.ficheCarriere.service.FonctionService;
 
 @RestController
-@RequestMapping("/fonctions")
+@RequestMapping("/Fonction")
 public class FonctionController {
 	
-
+    private final FonctionService fonctionService;
+    
 	    @Autowired
-	    private FonctionRepository fonctionRepository;
+	    public FonctionController(FonctionService fonctionService) {
+	          this.fonctionService = fonctionService;
+	       }
+
+	        @PostMapping("/addFonction")
+	        public ResponseEntity<Fonction> addFonction(@RequestBody Fonction fonction) {
+	            Fonction savedFonction = fonctionService.createFonction(fonction);
+	            return new ResponseEntity<>(savedFonction, HttpStatus.CREATED);
+	        }
+
+	        @GetMapping("/getAllFonctions")
+	        public ResponseEntity<List<Fonction>> getAllFonctions() {
+	            List<Fonction> fonctions = fonctionService.getAllFonctions();
+	            return new ResponseEntity<>(fonctions, HttpStatus.OK);
+	        }
+
+	        @GetMapping("/getFonction/{id}")
+	        public ResponseEntity<Fonction> getFonctionById(@PathVariable Long id) {
+	            Optional<Fonction> fonction = fonctionService.getFonctionById(id);
+	            return fonction.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+	                    .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	        }
+
+	        @PutMapping("/updateFonction/{id}")
+	        public ResponseEntity<Fonction> updateFonction(@PathVariable Long id, @RequestBody Fonction updatedFonction) {
+	            Fonction updated = fonctionService.updateFonction(id, updatedFonction);
+	            return new ResponseEntity<>(updated, HttpStatus.OK);
+	        }
+
+	        @DeleteMapping("/deleteFonction/{id}")
+	        public ResponseEntity<Void> deleteFonction(@PathVariable Long id) {
+	            fonctionService.deleteFonctionById(id);
+	            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	        }
+	    }
+
 
 	   
-	    @GetMapping
-	    public List<Fonction> getAllFonctions() {
-	        return fonctionRepository.findAll();
-	    }
-
-	  
-	    @GetMapping("/{id}")
-	    public ResponseEntity<Fonction> getFonctionById(@PathVariable Long id) {
-	        return fonctionRepository.findById(id)
-	                .map(ResponseEntity::ok)
-	                .orElse(ResponseEntity.notFound().build());
-	    }
-
-	 
-	    @PostMapping
-	    public ResponseEntity<Fonction> createFonction(@RequestBody Fonction fonction) {
-	        Fonction savedFonction = fonctionRepository.save(fonction);
-	        return ResponseEntity.ok(savedFonction);
-	    }
-
-	    
-	    @PutMapping("/{id}")
-	    public ResponseEntity<Fonction> updateFonction(@PathVariable Long id, @RequestBody Fonction fonction) {
-	        if (fonctionRepository.existsById(id)) {
-	            fonction.setId(id);
-	            Fonction updatedFonction = fonctionRepository.save(fonction);
-	            return ResponseEntity.ok(updatedFonction);
-	        } else {
-	            return ResponseEntity.notFound().build();
-	        }
-	    }
-
-	    @DeleteMapping("/{id}")
-	    public ResponseEntity<Void> deleteFonction(@PathVariable Long id) {
-	        if (fonctionRepository.existsById(id)) {
-	            fonctionRepository.deleteById(id);
-	            return ResponseEntity.noContent().build();
-	        } else {
-	            return ResponseEntity.notFound().build();
-	        }
-	    }
-	}
-
-
-

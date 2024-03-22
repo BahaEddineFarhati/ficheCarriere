@@ -9,38 +9,38 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/utilisateurs")
+@RequestMapping("/Utilisateur")
 public class UtilisateurController {
 
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
 
-    @PostMapping("/add")
+    @PostMapping("/addUtilisateur")
     public Utilisateur addUtilisateur(@RequestBody Utilisateur utilisateur) {
         return utilisateurRepository.save(utilisateur);
     }
 
     
-    @GetMapping("/all")
+    @GetMapping("/getAll")
     public List<Utilisateur> getAllUtilisateurs() {
         return utilisateurRepository.findAll();
     }
 
   
-    @GetMapping("/{id}")
+    @GetMapping("/getUtilisateur/{id}")
     public Optional<Utilisateur> getUtilisateurById(@PathVariable String id) {
         return utilisateurRepository.findById(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/updateUtilisateur/{id}")
     public Utilisateur updateUtilisateur(@PathVariable String id, @RequestBody Utilisateur updatedUtilisateur) {
         updatedUtilisateur.setMatricule(id);
         return utilisateurRepository.save(updatedUtilisateur);
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deleteUtilisateur/{id}")
     public void deleteUtilisateur(@PathVariable String id) {
         utilisateurRepository.deleteById(id);
     }

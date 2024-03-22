@@ -9,7 +9,6 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Utilisateur")
 public class Utilisateur extends Employe {
 
     @ManyToOne

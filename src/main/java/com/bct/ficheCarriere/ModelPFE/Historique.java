@@ -10,7 +10,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Historique ")
 public class Historique {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

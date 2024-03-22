@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "FormationUniersitaire ")
 public class FormationUniversitaire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +22,6 @@ public class FormationUniversitaire {
     private  String faculte;
     private Date dateDobtention;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "FormationUniversitaire_Employe",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "matricule"))
-    private Set<Employe> Employees = new HashSet<>();
-
+   
 
 }

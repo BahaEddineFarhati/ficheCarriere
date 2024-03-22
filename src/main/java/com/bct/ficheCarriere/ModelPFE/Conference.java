@@ -1,6 +1,6 @@
 package com.bct.ficheCarriere.ModelPFE;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -28,23 +28,16 @@ public class Conference {
     private String sujet;
     private String pays;
 
-
-
-//    @OneToMany
-//    private ArrayList<ConferenceEmployeKey> idEmploye;
-
-
-    
-    
-    
-    @JsonIgnore
+  
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "Conference_employe",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "matricule"))
+  @JsonManagedReference
     private List<Employe> Employees = new ArrayList<>();
 
-
+//@OneToMany
+//private ArrayList<ConferenceEmployeKey> idEmploye;
 
 
 }

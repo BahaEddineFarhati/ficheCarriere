@@ -9,39 +9,39 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/publications")
+@RequestMapping("/Publication")
 public class PublicationController {
 
     @Autowired
     private PublicationRepository publicationRepository;
 
 
-    @PostMapping("/add")
+    @PostMapping("/addPublication")
     public Publication addPublication(@RequestBody Publication publication) {
         return publicationRepository.save(publication);
     }
 
    
-    @GetMapping("/all")
+    @GetMapping("/getAll")
     public List<Publication> getAllPublications() {
         return publicationRepository.findAll();
     }
 
    
-    @GetMapping("/{id}")
+    @GetMapping("/getPublication/{id}")
     public Optional<Publication> getPublicationById(@PathVariable Long id) {
         return publicationRepository.findById(id);
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/updatePublication/{id}")
     public Publication updatePublication(@PathVariable Long id, @RequestBody Publication updatedPublication) {
         updatedPublication.setId(id);
         return publicationRepository.save(updatedPublication);
     }
 
   
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletePublication/{id}")
     public void deletePublication(@PathVariable Long id) {
         publicationRepository.deleteById(id);
     }

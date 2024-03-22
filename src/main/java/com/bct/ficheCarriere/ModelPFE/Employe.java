@@ -1,4 +1,5 @@
 package com.bct.ficheCarriere.ModelPFE;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +20,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-
 public class Employe {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,24 +36,24 @@ public class Employe {
     private Boolean disponibilitePourDesMissionALEtranger;
     private Boolean disponibilitePourDesChangementsDePoste;
     private Boolean disponibilitePourDesDeplacements;
-
+    
+    
     @ManyToMany(mappedBy = "Employees")
-    private Set<Fonction> fonctions = new HashSet<>();
-
-
-//    @OneToMany()
-//    private ArrayList<ConferenceEmployeKey> idConference;
-
-   
-    @ManyToMany(mappedBy = "Employees")
+    @JsonBackReference
     private List<Conference> Conferences = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "idFonctiont", nullable = false)
+    private Fonction fonction;
+
 
     @ManyToMany(mappedBy = "Employees")
     private Set<Projet> projets = new HashSet<>();
 
-    @ManyToMany(mappedBy = "Employees")
-    private Set<FormationUniversitaire> formationUniversitaires = new HashSet<>();
-
+    @ManyToOne
+    @JoinColumn(name = "idFormationUniversitaire", nullable = false)
+    private FormationUniversitaire formationUniv;
+   
     @ManyToOne
     @JoinColumn(name = "idDepartement", nullable = false)
     private Departement departement;
@@ -61,7 +61,11 @@ public class Employe {
     @ManyToMany(mappedBy = "employees" , cascade = {CascadeType.ALL})
     private Set<Grade> grades = new HashSet<>();
 
-
+    @ManyToOne
+    @JoinColumn(name = "idFormation", nullable = false)
+    private Formation formation;
    
 
+//  @OneToMany()
+//  private ArrayList<ConferenceEmployeKey> idConference;
 }

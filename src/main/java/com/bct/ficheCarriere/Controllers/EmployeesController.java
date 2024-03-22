@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/employes")
+@RequestMapping("/Employe")
 public class EmployeesController {
 
     @Autowired
@@ -27,13 +27,13 @@ public class EmployeesController {
     @Autowired
     private EmployeRepository employeRepository;
 
-    @PostMapping("/addEmploye/{id}")
+    @PostMapping("/addEmploye")
     public ResponseEntity<Employe> saveEmploye(@RequestBody Employe employe) {
         Employe savedEmploye = employeService.saveEmploye(employe);
         return new ResponseEntity<>(savedEmploye, HttpStatus.CREATED);
     }
 
-    @GetMapping("/getall")
+    @GetMapping("/getAll")
     public ResponseEntity<List<Employe>> getAllEmployes() {
         List<Employe> employes = employeService.getAllEmployes();
         return new ResponseEntity<>(employes, HttpStatus.OK);
@@ -57,7 +57,7 @@ public class EmployeesController {
         Employe updatedEmploye = employeService.updateEmploye(employeId, employeUpdates);
         return new ResponseEntity<>(updatedEmploye, HttpStatus.OK);
     }
-  //update the relation employe-conference
+     //update the relation employe-conference
    @Transactional
     @PutMapping("/{empId}/Conference/{confId}")
    public Employe employe_conf(@PathVariable Long empId, @PathVariable Long confId) {

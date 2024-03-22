@@ -13,7 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Fonction")
 public class Fonction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +23,9 @@ public class Fonction {
 
 
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+   /* @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "Fonction_employe",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "matricule"))
-    private Set<Employe> Employees = new HashSet<>();
+    private Set<Employe> Employees = new HashSet<>();*/
 }

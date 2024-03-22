@@ -17,35 +17,35 @@ import com.bct.ficheCarriere.ModelPFE.Role;
 import com.bct.ficheCarriere.Repositories.RoleRepository;
 
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/Role")
 public class RoleController {
 	
 	    @Autowired
 	    private RoleRepository roleRepository;
 
-	    // Get all roles
-	    @GetMapping
+
+	    @GetMapping("/getAll")
 	    public List<Role> getAllRoles() {
 	        return roleRepository.findAll();
 	    }
 
-	    // Get a specific role by ID
-	    @GetMapping("/{id}")
+	  
+	    @GetMapping("/getRole/{id}")
 	    public ResponseEntity<Role> getRoleById(@PathVariable Long id) {
 	        return roleRepository.findById(id)
 	                .map(ResponseEntity::ok)
 	                .orElse(ResponseEntity.notFound().build());
 	    }
 
-	    // Create a new role
-	    @PostMapping
+	
+	    @PostMapping("/addRole")
 	    public ResponseEntity<Role> createRole(@RequestBody Role role) {
 	        Role savedRole = roleRepository.save(role);
 	        return ResponseEntity.ok(savedRole);
 	    }
 
-	    // Update an existing role
-	    @PutMapping("/{id}")
+	   
+	    @PutMapping("/updateRole/{id}")
 	    public ResponseEntity<Role> updateRole(@PathVariable Long id, @RequestBody Role role) {
 	        if (roleRepository.existsById(id)) {
 	            role.setId(id);
@@ -57,7 +57,7 @@ public class RoleController {
 	    }
 
 	    // Delete a role by ID
-	    @DeleteMapping("/{id}")
+	    @DeleteMapping("/deleteRole/{id}")
 	    public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
 	        if (roleRepository.existsById(id)) {
 	            roleRepository.deleteById(id);

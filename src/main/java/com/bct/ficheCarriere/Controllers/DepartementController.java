@@ -1,9 +1,9 @@
 package com.bct.ficheCarriere.Controllers;
 
 import java.util.List;
-
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,52 +13,50 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.bct.ficheCarriere.ModelPFE.Departement;
-import com.bct.ficheCarriere.Repositories.DepartementRepository;
+import com.bct.ficheCarriere.service.DepartementService;
 
 @RestController
-@RequestMapping("/departements")
+@RequestMapping("/Departement")
 public class DepartementController {
+	
+	    private  DepartementService departementService;
 
+	    @Autowired
+	    public DepartementController(DepartementService departementService) {
+	        this.departementService = departementService;
+	    }
 
-    @Autowired
-    private DepartementRepository departementRepository;
+	    @PostMapping("/addDepartement")
+	    public ResponseEntity<Departement> addDepartement(@RequestBody Departement departement) {
+	        Departement savedDepartement = departementService.createDepartement(departement);
+	        return new ResponseEntity<>(savedDepartement, HttpStatus.CREATED);
+	    }
 
-    @GetMapping()
-    public List<Departement> getAllDepartements() {
-        return departementRepository.findAll();
-    }
+	    @GetMapping("/getAllDepartements")
+	    public ResponseEntity<List<Departement>> getAllDepartements() {
+	        List<Departement> departements = departementService.getAllDepartements();
+	        return new ResponseEntity<>(departements, HttpStatus.OK);
+	    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Departement> getDepartementById(@PathVariable long id) {
-        Optional<Departement> departement = departementRepository.findById(id);
-        return departement.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-    }
+	    @GetMapping("/getDepartement/{id}")
+	    public ResponseEntity<Departement> getDepartementById(@PathVariable Long id) {
+	        Optional<Departement> departement = departementService.getDepartementById(id);
+	        return departement.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+	                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	    }
 
-   @PostMapping
-    public Departement createDepartement(@RequestBody Departement departement) {
-        return departementRepository.save(departement);
-    }
+	    @PutMapping("/updateDepartement/{id}")
+	    public ResponseEntity<Departement> updateDepartement(@PathVariable Long id, @RequestBody Departement updatedDepartement) {
+	        Departement updated = departementService.updateDepartement(id, updatedDepartement);
+	        return new ResponseEntity<>(updated, HttpStatus.OK);
+	    }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Departement> updateDepartement(@PathVariable long id, @RequestBody Departement updatedDepartement) {
-        Optional<Departement> existingDepartement = departementRepository.findById(id);
-        if (existingDepartement.isPresent()) {
-            updatedDepartement.setId(id);
-            return ResponseEntity.ok(departementRepository.save(updatedDepartement));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+	    @DeleteMapping("/deleteDepartement/{id}")
+	    public ResponseEntity<Void> deleteDepartement(@PathVariable Long id) {
+	        departementService.deleteDepartementById(id);
+	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	    }
+	}
 
-   @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDepartement(@PathVariable long id) {
-        if (departementRepository.existsById(id)) {
-            departementRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }}
 
