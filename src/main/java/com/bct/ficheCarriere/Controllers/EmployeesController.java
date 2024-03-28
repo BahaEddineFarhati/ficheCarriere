@@ -90,7 +90,16 @@ public class EmployeesController {
    }
 
 
+    @GetMapping("/getEmp")
+    public ResponseEntity<List<Employe>> getEmployees(
+            @RequestParam(defaultValue = "10") int limit) {
+        // Retrieve employees from the database using the specified limit
+        List<Employe> employees = employeService.getEmployeeswithlimit(limit);
+        return ResponseEntity.ok(employees);
     }
+
+
+}
     
     
    

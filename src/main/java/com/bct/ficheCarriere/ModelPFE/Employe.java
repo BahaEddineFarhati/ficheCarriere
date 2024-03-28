@@ -19,11 +19,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Employe {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id ;
     private String matricule;
     private String nom;
     private String prenom ;
@@ -43,12 +44,9 @@ public class Employe {
     private List<Conference> Conferences = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "idFonctiont", nullable = false)
+    @JoinColumn(name = "idFonction", nullable = false)
     private Fonction fonction;
 
-
-    @ManyToMany(mappedBy = "Employees")
-    private Set<Projet> projets = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "idFormationUniversitaire", nullable = false)
@@ -64,6 +62,10 @@ public class Employe {
     @ManyToOne
     @JoinColumn(name = "idFormation", nullable = false)
     private Formation formation;
+
+
+    @OneToMany(mappedBy = "employe")
+    private List<EmployeProjet> employeProjet = new ArrayList<>();
    
 
 //  @OneToMany()
