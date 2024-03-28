@@ -19,7 +19,7 @@ public class Publication {
     private String lien;
 
     @ManyToOne
-    @JoinColumn(name = "Matricule", nullable = false)
+    @JoinColumn(name = "id_employe", nullable = false)
     private Employe employe;
 
 
