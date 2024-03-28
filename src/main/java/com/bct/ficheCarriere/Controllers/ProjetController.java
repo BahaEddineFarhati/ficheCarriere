@@ -1,21 +1,22 @@
 package com.bct.ficheCarriere.Controllers;
 
 import com.bct.ficheCarriere.ModelPFE.Projet;
+
 import com.bct.ficheCarriere.service.ProjetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/Projet")
 public class ProjetController {
-
+    @Autowired
 	   private ProjetService projetService;
 
-        @Autowired
+    
         public ProjetController(ProjetService projetService) {
             this.projetService = projetService;
         }

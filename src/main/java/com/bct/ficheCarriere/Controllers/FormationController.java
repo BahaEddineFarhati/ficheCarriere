@@ -21,10 +21,10 @@ import com.bct.ficheCarriere.service.FormationService;
 @RestController
 @RequestMapping("/Formation")
 public class FormationController {
-
+	 @Autowired
 	    private FormationService formationService;
 
-	    @Autowired
+	   
 	    public FormationController(FormationService formationService) {
 	        this.formationService = formationService;
 	    }

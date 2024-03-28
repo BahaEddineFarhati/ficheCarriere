@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -24,7 +26,7 @@ public class Projet {
 //    private Set<Employe> Employees = new HashSet<>();
 
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "projet")
     private List<EmployeProjet> employeProjet = new ArrayList<>() ;
 

@@ -1,13 +1,7 @@
 package com.bct.ficheCarriere.Controllers;
 
-import com.bct.ficheCarriere.ModelPFE.Conference;
 import com.bct.ficheCarriere.ModelPFE.Employe;
-import com.bct.ficheCarriere.Repositories.ConferenceRepository;
-import com.bct.ficheCarriere.Repositories.EmployeRepository;
 import com.bct.ficheCarriere.service.EmployeService;
-
-import jakarta.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +16,7 @@ public class EmployeesController {
 
     @Autowired
     private EmployeService employeService;
-    @Autowired
-    private  ConferenceRepository conferenceRepository;
-    @Autowired
-    private EmployeRepository employeRepository;
-
+   
     @PostMapping("/addEmploye")
     public ResponseEntity<Employe> saveEmploye(@RequestBody Employe employe) {
         Employe savedEmploye = employeService.saveEmploye(employe);
@@ -58,7 +48,7 @@ public class EmployeesController {
         return new ResponseEntity<>(updatedEmploye, HttpStatus.OK);
     }
      //update the relation employe-conference
-   @Transactional
+   /*@Transactional
     @PutMapping("/{empId}/Conference/{confId}")
    public Employe employe_conf(@PathVariable Long empId, @PathVariable Long confId) {
        if (empId == null) {
@@ -74,7 +64,7 @@ public class EmployeesController {
 
        Conference conference = conferenceRepository.findById(confId)
                .orElseThrow(() -> new IllegalArgumentException("Conférence avec l'ID " + confId + " introuvable"));
-
+   
        // Update both sides of the relationship
        List<Conference> conferenceSet = employe.getConferences();
        conferenceSet.add(conference);
@@ -87,7 +77,7 @@ public class EmployeesController {
        conferenceRepository.save(conference);
 
        return employe;
-   }
+   }*/
 
 
     @GetMapping("/getEmp")

@@ -20,10 +20,10 @@ import com.bct.ficheCarriere.service.HistoriqueService;
 @RequestMapping("/Historique")
 public class HistoriqueController {
 	
-
+	 @Autowired
 	    private HistoriqueService historiqueService;
 
-	    @Autowired
+	   
 	    public HistoriqueController(HistoriqueService historiqueService) {
 	        this.historiqueService = historiqueService;
 	    }

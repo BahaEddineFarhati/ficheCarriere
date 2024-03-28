@@ -1,6 +1,7 @@
 package com.bct.ficheCarriere.Controllers;
 
 import com.bct.ficheCarriere.ModelPFE.*;
+
 import com.bct.ficheCarriere.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,34 +13,30 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.Normalizer;
-import java.util.Collections;
+
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/Utilisateur")
 public class UtilisateurController {
+	 @Autowired
+    private  UtilisateurRepository utilisateurRepository;
+    private  PasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
+    private RoleRepository roleRepository ;
 
-    private final UtilisateurRepository utilisateurRepository;
+    private  DepartementRepository departementRepository ;
 
-    private final PasswordEncoder passwordEncoder;
+    private FonctionRepository fonctionRepository ;
 
+    private  FormationRepository formationRepository ;
 
-    private final AuthenticationManager authenticationManager;
-
-    private final RoleRepository roleRepository ;
-
-    private final DepartementRepository departementRepository ;
-
-    private final FonctionRepository fonctionRepository ;
-
-    private final FormationRepository formationRepository ;
-
-    private final FormationUniversitaireRepository formationUniversitaireRepository ;
+    private FormationUniversitaireRepository formationUniversitaireRepository ;
+    
 
 
-    @Autowired
+   
     public UtilisateurController(UtilisateurRepository utilisateurRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, RoleRepository roleRepository, DepartementRepository departementRepository, FonctionRepository fonctionRepository, FormationRepository formationRepository, FormationUniversitaireRepository formationUniversitaireRepository) {
         this.utilisateurRepository = utilisateurRepository;
         this.passwordEncoder = passwordEncoder;

@@ -1,10 +1,11 @@
 package com.bct.ficheCarriere.Repositories;
 
-import com.bct.ficheCarriere.ModelPFE.EmployeProjet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import com.bct.ficheCarriere.ModelPFE.EmployeGrade;
 
 @Repository
-public interface EmployeProjetRepository extends JpaRepository<EmployeProjet,Long> {
+
+public interface EmployeGradeRepository extends JpaRepository<EmployeGrade,Long>{
 
 }

@@ -20,10 +20,10 @@ import com.bct.ficheCarriere.service.PublicationService;
 @RestController
 @RequestMapping("/Publication")
 public class PublicationController {
-
+	 @Autowired
     private final PublicationService publicationService;
 
-    @Autowired
+   
     public PublicationController(PublicationService publicationService) {
         this.publicationService = publicationService;
     }

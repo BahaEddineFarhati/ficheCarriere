@@ -1,18 +1,20 @@
 package com.bct.ficheCarriere.ModelPFE;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,15 +29,17 @@ public class Conference {
     private String nom;
     private String sujet;
     private String pays;
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "conference")
+    private List<EmployeConference> employeConference = new ArrayList<>() ;
   
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+   /* @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "Conference_employe",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "matricule"))
   @JsonIgnore
     private List<Employe> Employees = new ArrayList<>();
-
+*/
 //@OneToMany
 //private ArrayList<ConferenceEmployeKey> idEmploye;
 

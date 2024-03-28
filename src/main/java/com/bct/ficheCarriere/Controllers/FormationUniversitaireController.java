@@ -1,6 +1,7 @@
 package com.bct.ficheCarriere.Controllers;
 
 import java.util.List;
+
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bct.ficheCarriere.ModelPFE.FormationUniversitaire;
-import com.bct.ficheCarriere.Repositories.FormationUniversitaireRepository;
+
 import com.bct.ficheCarriere.service.FormationUniversitaireService;
 
 @RestController
 @RequestMapping("/FormationUniv")
 public class FormationUniversitaireController {
-	
+	@Autowired
 	    private final FormationUniversitaireService formationUniversitaireService;
 
-	    @Autowired
+	    
 	    public FormationUniversitaireController(FormationUniversitaireService formationUniversitaireService) {
 	        this.formationUniversitaireService = formationUniversitaireService;
 	    }

@@ -1,6 +1,4 @@
 package com.bct.ficheCarriere.ModelPFE;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,7 +6,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.*;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import java.util.*;
 import lombok.AllArgsConstructor;
@@ -39,14 +36,10 @@ public class Employe {
     private Boolean disponibilitePourDesDeplacements;
     
     
-    @ManyToMany(mappedBy = "Employees")
-    @JsonBackReference
-    private List<Conference> Conferences = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "idFonction", nullable = false)
     private Fonction fonction;
-
 
     @ManyToOne
     @JoinColumn(name = "idFormationUniversitaire", nullable = false)
@@ -55,18 +48,22 @@ public class Employe {
     @ManyToOne
     @JoinColumn(name = "idDepartement", nullable = false)
     private Departement departement;
-
-    @ManyToMany(mappedBy = "employees" , cascade = {CascadeType.ALL})
-    private Set<Grade> grades = new HashSet<>();
-
+    
     @ManyToOne
     @JoinColumn(name = "idFormation", nullable = false)
     private Formation formation;
+    
 
+    @OneToMany(mappedBy = "employe")
+    private List<EmployeGrade> EmployeGrade = new ArrayList<>();
 
     @OneToMany(mappedBy = "employe")
     private List<EmployeProjet> employeProjet = new ArrayList<>();
-   
+    
+    @OneToMany(mappedBy = "employe")
+    private List<EmployeConference> employeConference = new ArrayList<>();
+    
+ 
 
 //  @OneToMany()
 //  private ArrayList<ConferenceEmployeKey> idConference;

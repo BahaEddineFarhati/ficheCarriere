@@ -2,7 +2,6 @@ package com.bct.ficheCarriere.Controllers;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,18 +13,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.bct.ficheCarriere.ModelPFE.Fonction;
-import com.bct.ficheCarriere.Repositories.FonctionRepository;
 import com.bct.ficheCarriere.service.FonctionService;
 
 @RestController
 @RequestMapping("/Fonction")
 public class FonctionController {
-	
+	@Autowired
     private final FonctionService fonctionService;
     
-	    @Autowired
+	    
 	    public FonctionController(FonctionService fonctionService) {
 	          this.fonctionService = fonctionService;
 	       }

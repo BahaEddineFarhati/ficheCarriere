@@ -54,13 +54,13 @@ public class EmployeService {
         
         
         
-        public Optional<Employe> getEmployeeWithConferences(Long employeeId) {
+      /*  public Optional<Employe> getEmployeeWithConferences(Long employeeId) {
             return EmployeRepository.findById(employeeId)
                     .map(employee -> {
                         employee.getConferences().size(); // Fetch conferences eagerly
                         return employee;
                     });
-        }
+        }*/
 
 
     public List<Employe> getEmployeeswithlimit(int limit) {

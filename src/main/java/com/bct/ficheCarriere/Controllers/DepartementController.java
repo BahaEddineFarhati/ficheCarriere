@@ -19,10 +19,10 @@ import com.bct.ficheCarriere.service.DepartementService;
 @RestController
 @RequestMapping("/Departement")
 public class DepartementController {
-	
+	@Autowired
 	    private  DepartementService departementService;
 
-	    @Autowired
+	
 	    public DepartementController(DepartementService departementService) {
 	        this.departementService = departementService;
 	    }
