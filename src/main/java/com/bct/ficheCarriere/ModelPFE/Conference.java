@@ -33,7 +33,7 @@ public class Conference {
     @JoinTable(name = "Conference_employe",
             joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "matricule"))
-  @JsonManagedReference
+  @JsonIgnore
     private List<Employe> Employees = new ArrayList<>();
 
 //@OneToMany

@@ -61,6 +61,12 @@ public class EmployeService {
                         return employee;
                     });
         }
+
+
+    public List<Employe> getEmployeeswithlimit(int limit) {
+        // Retrieve employees from the database with the specified limit
+        return EmployeRepository.findTopN(limit);
+    }
         
         
         

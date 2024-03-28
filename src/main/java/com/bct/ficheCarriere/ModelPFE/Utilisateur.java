@@ -3,13 +3,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
-import java.util.ArrayList;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 public class Utilisateur extends Employe {
+
+
+    String username ;
+
+    String password ;
+
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)

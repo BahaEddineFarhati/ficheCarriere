@@ -4,9 +4,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.bct.ficheCarriere.ModelPFE.Employe;
+
+import java.util.List;
+
 @Repository
 public interface EmployeRepository extends JpaRepository<Employe, Long>{
-	
+    @Query("SELECT e FROM Employe e ORDER BY e.Id ASC")
+    List<Employe> findTopN(int limit);
+
 }
 
 

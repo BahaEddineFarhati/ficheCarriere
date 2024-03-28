@@ -1,65 +1,58 @@
-/*package com.bct.ficheCarriere.security;
+package com.bct.ficheCarriere.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // Configure authentication (in-memory, JDBC, LDAP, etc.)
-        auth.inMemoryAuthentication()
-                .withUser("cons")
-                .password(passwordEncoder().encode("cons123"))
-                .roles("CONS");
-        auth.inMemoryAuthentication()
-                .withUser("study")
-                .password(passwordEncoder().encode("study123"))
-                .roles("STUDY");
-        auth.inMemoryAuthentication()
-                .withUser("rh")
-                .password(passwordEncoder().encode("rh123"))
-                .roles("RH");
-        auth.inMemoryAuthentication()
-                .withUser("project")
-                .password(passwordEncoder().encode("project123"))
-                .roles("PROJECT");
+
+
+    private CustomUserDetailsService userDetailsService ;
+
+    @Autowired
+    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/study/**").hasRole("STUDY")
-                .antMatchers("/project/**").hasRole("PROJECT")
-                .antMatchers("/rh/**").hasRole("RH")
-                .antMatchers("/cons/**").hasRole("CONS")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .defaultSuccessUrl("/listEmployees", true)
-                .permitAll()
-                .and()
-                .logout()
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .and().httpBasic().and().csrf().disable(); // Added this line to disable HTTP Basic and CSRF
 
 
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/Utilisateur/auth/**").permitAll()
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults());
+        return http.build();
+    }
+
+
+
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        // Use BCryptPasswordEncoder for password encoding
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
-*/

@@ -1,8 +1,11 @@
 package com.bct.ficheCarriere.Repositories;
 
 import com.bct.ficheCarriere.ModelPFE.Departement;
+import com.bct.ficheCarriere.ModelPFE.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DepartementRepository extends JpaRepository<Departement ,Long> {
+import java.util.Optional;
 
+public interface DepartementRepository extends JpaRepository<Departement ,Long> {
+    Optional<Departement> findByabreviation(String name);
 }
