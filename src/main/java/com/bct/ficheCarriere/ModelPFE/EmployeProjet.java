@@ -1,6 +1,7 @@
 package com.bct.ficheCarriere.ModelPFE;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,9 +18,9 @@ public class EmployeProjet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     private Employe employe ;
-
     @ManyToOne
     private Projet projet ;
 

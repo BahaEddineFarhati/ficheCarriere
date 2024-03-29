@@ -15,6 +15,7 @@ public class Historique {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
     private Date date;
+    private String adresseIp ;
 
 
  @ManyToOne

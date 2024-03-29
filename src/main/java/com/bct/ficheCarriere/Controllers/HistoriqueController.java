@@ -2,6 +2,11 @@ package com.bct.ficheCarriere.Controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import com.bct.ficheCarriere.ModelPFE.Employe;
+import com.bct.ficheCarriere.ModelPFE.dto.EmployeBaseInformation;
+import com.bct.ficheCarriere.ModelPFE.dto.historiqueDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +39,23 @@ public class HistoriqueController {
 	        return new ResponseEntity<>(savedHistorique, HttpStatus.CREATED);
 	    }
 
-	    @GetMapping("/getAllHistoriques")
-	    public ResponseEntity<List<Historique>> getAllHistoriques() {
+	    @GetMapping("/getHistoriques")
+	    public ResponseEntity<List<Historique>> getHistoriques() {
 	        List<Historique> historiques = historiqueService.getAllHistoriques();
 	        return new ResponseEntity<>(historiques, HttpStatus.OK);
 	    }
+
+
+	@GetMapping("/getAllHistoriques")
+	public ResponseEntity<List<historiqueDTO>> getAllHistoriques() {
+		List<Historique> historiques = historiqueService.getAllHistoriques();
+
+		List<historiqueDTO> His = historiques.stream()
+				.map(this::mapToDTO)
+				.toList();
+
+		return new ResponseEntity<>(His, HttpStatus.OK);
+	}
 
 	    @GetMapping("/getHistorique/{id}")
 	    public ResponseEntity<Historique> getHistoriqueById(@PathVariable Long id) {
@@ -58,4 +75,18 @@ public class HistoriqueController {
 	        historiqueService.deleteHistoriqueById(id);
 	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	    }
+
+
+	private historiqueDTO mapToDTO(Historique his) {
+		historiqueDTO hisDto = new historiqueDTO();
+		hisDto.setNom(his.getUtilisateur().getNom());
+		hisDto.setPrenom(his.getUtilisateur().getPrenom());
+		hisDto.setDepartement(his.getUtilisateur().getDepartement().getAbreviation());
+		hisDto.setMatricule(his.getUtilisateur().getMatricule());
+		hisDto.setAdresseIp(his.getAdresseIp());
+		hisDto.setId(his.getId());
+		hisDto.setDate(his.getDate());
+		hisDto.setRole(his.getUtilisateur().getRole().getNom());
+		return hisDto;
+	}
 	}

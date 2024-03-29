@@ -27,6 +27,7 @@ public class Employe {
     private String prenom ;
     private String image ;
     private String email ;
+    private Integer numeroTelephone ;
     private Date dateDeNaissance ;
     private String adresse ;
     private String responsabilite ;
@@ -38,7 +39,7 @@ public class Employe {
     
 
     @ManyToOne
-    @JoinColumn(name = "idFonction", nullable = false)
+    @JoinColumn(name = "idFonction")
     private Fonction fonction;
 
     @ManyToOne
@@ -49,9 +50,9 @@ public class Employe {
     @JoinColumn(name = "idDepartement", nullable = false)
     private Departement departement;
     
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name = "idFormation", nullable = false)
-    private Formation formation;
+    private List<Formation> formations = new ArrayList<>();
     
 
     @OneToMany(mappedBy = "employe")

@@ -1,11 +1,13 @@
 package com.bct.ficheCarriere.service;
 
+import com.bct.ficheCarriere.ModelPFE.Departement;
 import com.bct.ficheCarriere.ModelPFE.Employe;
 import com.bct.ficheCarriere.Repositories.EmployeRepository;
-
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.introspect.AnnotatedAndMetadata;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,11 +69,14 @@ public class EmployeService {
         // Retrieve employees from the database with the specified limit
         return EmployeRepository.findTopN(limit);
     }
-        
-        
-        
-      
+
+
+
+    public List<Employe> getEmployeesByDepartmentWithLimit(Departement department, int limit) {
+
+        return EmployeRepository.findBydepartement(department, Pageable.ofSize(10));
     }
+}
 
     
 
