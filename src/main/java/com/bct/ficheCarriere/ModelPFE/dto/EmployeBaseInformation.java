@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class EmployeBaseInformation {
+    private Long id ;
     private String matricule ;
     private String nom ;
     private String prenom ;

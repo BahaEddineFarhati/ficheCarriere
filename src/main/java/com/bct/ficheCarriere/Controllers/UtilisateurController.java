@@ -8,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -112,7 +111,7 @@ public class UtilisateurController {
 
     @PostMapping("/auth/login")
     public AuthenticationResponse login (@RequestBody Utilisateur utilisateur , HttpServletRequest request){
-        try {
+
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(utilisateur.getUsername(), utilisateur.getPassword()));
 
             // Retrieve the user from repository
@@ -137,12 +136,30 @@ public class UtilisateurController {
 
             // Return authentication response with JWT token
             return new AuthenticationResponse(jwt, "User login was successful", user.getId());
+
+    }
+
+
+    @GetMapping("/auth/validate-token")
+    public ResponseEntity<Integer> validateToken(@RequestParam("token") String token) {
+        boolean t = tokenRepository.existsByToken(token);
+        if(t) {
+            return ResponseEntity.ok(0);
         }
-        catch (BadCredentialsException e) {
-            // Handle invalid username or password
-            return new AuthenticationResponse("","Nom d'utilisateur ou mot de passe incorrect",-999L);
+        else {
+            return ResponseEntity.ok(1);
         }
     }
+
+
+    @GetMapping("/auth/GetUser")
+    public Utilisateur GetUser(@RequestParam("token") String token) {
+        String username = jwtService.extractUsername(token);
+
+        return utilisateurRepository.findByUsername(username).orElseThrow();
+    }
+
+
 
 
 

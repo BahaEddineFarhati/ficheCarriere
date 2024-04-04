@@ -186,9 +186,10 @@ public class EmployeesController {
 
     private EmployeBaseInformation mapToEmployeeDTO(Employe employe) {
         EmployeBaseInformation employeeDTO = new EmployeBaseInformation();
+        employeeDTO.setId(employe.getId());
         employeeDTO.setMatricule(employe.getMatricule());
-        employeeDTO.setNom(employe.getMatricule());
-        employeeDTO.setPrenom(employe.getMatricule());
+        employeeDTO.setNom(employe.getNom());
+        employeeDTO.setPrenom(employe.getPrenom());
         employeeDTO.setFonction(employe.getFonction());
         employeeDTO.setDepartement(employe.getDepartement());
         // Map other fields if needed
