@@ -4,11 +4,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 public class Utilisateur extends Employe {
+
+
 
 
     String username ;
@@ -19,6 +23,7 @@ public class Utilisateur extends Employe {
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
 
 
 

@@ -46,10 +46,11 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/Utilisateur/auth/**").permitAll()
-                        .requestMatchers("/Employe/getEmployeProjetInfo/**").hasRole("projet")
-                        .requestMatchers("/Employe/getEmployeRhInfo/**").hasRole("rh")
-                        .requestMatchers("/Employe/admin/**").hasRole("admin")
-                        .requestMatchers("/Utilisateur/admin/**").hasRole("admin")
+                        .requestMatchers("/Employe/getEmployeProjetInfo/**").hasRole("Projet")
+                        .requestMatchers("/EmployeProjet/**").hasAnyRole("Admin","Projet")
+                        .requestMatchers("/Employe/getEmployeRhInfo/**").hasRole("Rh")
+                        .requestMatchers("/Employe/admin/**").hasRole("Admin")
+                        .requestMatchers("/Utilisateur/admin/**").hasRole("Admin")
                         .anyRequest().authenticated()
                 ).userDetailsService(userDetailsService)
                 .sessionManagement(session->session

@@ -77,6 +77,13 @@ public class HistoriqueController {
 	    }
 
 
+	@DeleteMapping("/deleteAllHistoriques")
+	public ResponseEntity<Void> deleteAllHistoriques() {
+		historiqueService.deleteAllHistoriques();
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+
 	private historiqueDTO mapToDTO(Historique his) {
 		historiqueDTO hisDto = new historiqueDTO();
 		hisDto.setNom(his.getUtilisateur().getNom());

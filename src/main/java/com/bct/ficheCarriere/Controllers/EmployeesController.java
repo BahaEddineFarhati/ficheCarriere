@@ -1,10 +1,14 @@
 package com.bct.ficheCarriere.Controllers;
 
 import com.bct.ficheCarriere.ModelPFE.*;
+import com.bct.ficheCarriere.ModelPFE.CompetencesClasses.CompetenceInformatique;
+import com.bct.ficheCarriere.ModelPFE.CompetencesClasses.CompetenceTechnique;
 import com.bct.ficheCarriere.ModelPFE.dto.EmployeBaseInformation;
 import com.bct.ficheCarriere.ModelPFE.dto.EmployeBaseProfilinformation;
 import com.bct.ficheCarriere.ModelPFE.dto.EmployeProjetInfo;
 import com.bct.ficheCarriere.ModelPFE.dto.EmployeRhInfo;
+import com.bct.ficheCarriere.Repositories.CompetenceInformatiqueInterface;
+import com.bct.ficheCarriere.Repositories.CompetenceTechniqueInterface;
 import com.bct.ficheCarriere.Repositories.PublicationRepository;
 import com.bct.ficheCarriere.Repositories.UtilisateurRepository;
 import com.bct.ficheCarriere.service.EmployeService;
@@ -35,6 +39,12 @@ public class EmployeesController {
 
     @Autowired
     private PublicationRepository publicationRepository;
+
+    @Autowired
+    private CompetenceInformatiqueInterface competenceInformatiqueInterface ;
+
+    @Autowired
+    private CompetenceTechniqueInterface competenceTechniqueInterface ;
    
     @PostMapping("/admin/addEmploye")
     public ResponseEntity<Employe> saveEmploye(@RequestBody Employe employe) {
@@ -109,12 +119,11 @@ public class EmployeesController {
         Employe employe = employeService.getEmployeById(id).orElseThrow();
         EmployeBaseProfilinformation emp = new EmployeBaseProfilinformation();
 
-        List<Publication> publications = publicationRepository.findByEmploye(employe);
 
         emp.setMatricule(employe.getMatricule());
-        emp.setNom(employe.getMatricule());
-        emp.setPrenom(employe.getMatricule());
-        emp.setImage(employe.getMatricule());
+        emp.setNom(employe.getNom());
+        emp.setPrenom(employe.getPrenom());
+        emp.setImage(employe.getImage());
         emp.setEmail(employe.getEmail());
         emp.setNumeroTelephone(employe.getNumeroTelephone());
         emp.setDateDeNaissance(employe.getDateDeNaissance());
@@ -122,7 +131,7 @@ public class EmployeesController {
         emp.setFonction(employe.getFonction());
         emp.setFormationUniv(employe.getFormationUniv());
         emp.setDepartement(employe.getDepartement());
-        emp.setPublications(publications);
+        emp.setPublications(employe.getPublications());
         /*emp.setConferences(employe.getEmployeConference().stream()
                 .map(EmployeConference::getConference)
                 .collect(Collectors.toList()));*/
@@ -142,7 +151,8 @@ public class EmployeesController {
         emp.setProjets(employe.getEmployeProjet().stream()
                 .map(EmployeProjet::getProjet)
                 .collect(Collectors.toList()));
-        emp.setCompetences("Table Compétences NEKSAA !");
+        emp.setCompetencesInformatiques(employe.getCompetenceInformatique());
+        emp.setCompetencesTechniques(employe.getCompetenceTechnique());
         emp.setResponsabilite(employe.getResponsabilite());
         emp.setFormations(employe.getFormations());
 
@@ -158,7 +168,8 @@ public class EmployeesController {
         emp.setGrades(employe.getEmployeGrade().stream()
                 .map(EmployeGrade::getGrade)
                 .collect(Collectors.toList()));
-        emp.setCompetences("Table Compétences NEKSAA !");
+        emp.setCompetencesInformatiques(employe.getCompetenceInformatique());
+        emp.setCompetencesTechniques(employe.getCompetenceTechnique());
         emp.setResponsabilite(employe.getResponsabilite());
         emp.setFormations(employe.getFormations());
         emp.setId(employe.getId());
@@ -169,7 +180,8 @@ public class EmployeesController {
         emp.setDisponibilitePourDesChangementsDePoste(employe.getDisponibilitePourDesChangementsDePoste());
         emp.setDisponibilitePourDesDeplacements(employe.getDisponibilitePourDesDeplacements());
         emp.setDisponibilitePourDesMissionALEtranger(employe.getDisponibilitePourDesMissionALEtranger());
-        emp.setNivLangue("Att nivLangue Nekes !");
+        emp.setNiveauLangueFrancais(employe.getNiveauLangueFrancais());
+        emp.setNiveauLangueAnglais(employe.getNiveauLangueAnglais());
         return ResponseEntity.ok(emp);
     }
 

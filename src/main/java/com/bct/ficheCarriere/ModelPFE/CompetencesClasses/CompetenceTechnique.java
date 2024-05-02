@@ -1,25 +1,19 @@
-package com.bct.ficheCarriere.ModelPFE;
+package com.bct.ficheCarriere.ModelPFE.CompetencesClasses;
 
+
+import com.bct.ficheCarriere.ModelPFE.Employe;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.Date;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Publication {
+@Entity
+public class CompetenceTechnique {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private Date date;
-    private String nom;
-    private String lien;
-
-
-
-
-
+    private long id_CT;
+    private String nom ;
 }

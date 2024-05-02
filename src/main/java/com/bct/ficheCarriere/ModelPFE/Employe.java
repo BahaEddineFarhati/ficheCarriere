@@ -1,4 +1,6 @@
 package com.bct.ficheCarriere.ModelPFE;
+import com.bct.ficheCarriere.ModelPFE.CompetencesClasses.CompetenceInformatique;
+import com.bct.ficheCarriere.ModelPFE.CompetencesClasses.CompetenceTechnique;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,6 +37,8 @@ public class Employe {
     private Boolean disponibilitePourDesMissionALEtranger;
     private Boolean disponibilitePourDesChangementsDePoste;
     private Boolean disponibilitePourDesDeplacements;
+    private String niveauLangueFrancais ;
+    private String niveauLangueAnglais ;
     
     
 
@@ -51,7 +55,7 @@ public class Employe {
     private Departement departement;
     
     @OneToMany
-    @JoinColumn(name = "idFormation", nullable = false)
+    @JoinColumn(name = "idEmploye")
     private List<Formation> formations = new ArrayList<>();
     
 
@@ -63,6 +67,20 @@ public class Employe {
     
     @OneToMany(mappedBy = "employe")
     private List<EmployeConference> employeConference = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "idEmploye")
+    private List<CompetenceInformatique> CompetenceInformatique = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "idEmploye")
+    private List<CompetenceTechnique> CompetenceTechnique = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "id_employe", nullable = false)
+    private List<Publication> publications = new ArrayList<>();
+
+
     
  
 

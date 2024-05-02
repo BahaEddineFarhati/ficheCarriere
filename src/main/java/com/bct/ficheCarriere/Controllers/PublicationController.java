@@ -34,7 +34,7 @@ public class PublicationController {
         return new ResponseEntity<>(publications, HttpStatus.OK);
     }
 
-    @GetMapping("//getPublication/{id}")
+    @GetMapping("/getPublication/{id}")
     public ResponseEntity<Publication> getPublicationById(@PathVariable("id") Long id) {
         return publicationService.getPublicationById(id)
                 .map(publication -> new ResponseEntity<>(publication, HttpStatus.OK))

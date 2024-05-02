@@ -2,6 +2,8 @@ package com.bct.ficheCarriere.ModelPFE.dto;
 
 
 import com.bct.ficheCarriere.ModelPFE.*;
+import com.bct.ficheCarriere.ModelPFE.CompetencesClasses.CompetenceInformatique;
+import com.bct.ficheCarriere.ModelPFE.CompetencesClasses.CompetenceTechnique;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +24,8 @@ public class EmployeRhInfo {
     private List<Formation> formations = new ArrayList<>();
     private List<Grade> grades = new ArrayList<>();
     private List<Conference> conferences = new ArrayList<>();
-    private String Competences ;
-    private String NivLangue ;
+    private List<CompetenceTechnique> competencesTechniques = new ArrayList<>() ;
+    private List<CompetenceInformatique> competencesInformatiques = new ArrayList<>()  ;
+    private String niveauLangueFrancais ;
+    private String niveauLangueAnglais ;
 }

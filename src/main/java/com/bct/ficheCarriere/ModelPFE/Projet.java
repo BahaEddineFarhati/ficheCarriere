@@ -15,9 +15,9 @@ public class Projet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type;
+    private String description;
     private Date date;
-    private String roleProjet;
+    private String Nom;
 
 //    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 //    @JoinTable(name = "Projet_Employe",

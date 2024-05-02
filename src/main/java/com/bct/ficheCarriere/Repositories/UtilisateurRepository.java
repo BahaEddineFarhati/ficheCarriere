@@ -9,4 +9,6 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur , Strin
     Optional<Utilisateur> findByUsername(String username);
     Boolean existsByUsername(String username);
 
+    void deleteUtilisateurById(Long id);
+
 }

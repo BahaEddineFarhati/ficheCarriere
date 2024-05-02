@@ -4,6 +4,8 @@ import com.bct.ficheCarriere.ModelPFE.*;
 import com.bct.ficheCarriere.Repositories.*;
 import com.bct.ficheCarriere.security.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
+import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static java.lang.Long.parseLong;
 
 @RestController
 @RequestMapping("/Utilisateur")
@@ -36,15 +40,18 @@ public class UtilisateurController {
 
     private final HistoriqueRepository historiqueRepository ;
 
+    private final RoleRepository roleRepository;
+
 
     @Autowired
-    public UtilisateurController(UtilisateurRepository utilisateurRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, TokenRepository tokenRepository, HistoriqueRepository historiqueRepository) {
+    public UtilisateurController(UtilisateurRepository utilisateurRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, TokenRepository tokenRepository, HistoriqueRepository historiqueRepository , RoleRepository roleRepository) {
         this.utilisateurRepository = utilisateurRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.tokenRepository = tokenRepository;
         this.historiqueRepository = historiqueRepository;
+        this.roleRepository = roleRepository;
     }
 
     @PostMapping("/admin/addUtilisateur")
@@ -98,17 +105,27 @@ public class UtilisateurController {
 
     @PutMapping("admin/updateUtilisateur/{id}")
     public Utilisateur updateUtilisateur(@PathVariable String id, @RequestBody Utilisateur updatedUtilisateur) {
-        updatedUtilisateur.setMatricule(id);
-        return utilisateurRepository.save(updatedUtilisateur);
+        Utilisateur user = utilisateurRepository.findById(id).orElseThrow();
+        Role role = roleRepository.findById(updatedUtilisateur.getRole().getId()).orElseThrow() ;
+        user.setUsername(updatedUtilisateur.getUsername());
+        user.setRole(role);
+
+        return utilisateurRepository.save(user);
     }
 
 
+    @Transactional
     @DeleteMapping("admin/deleteUtilisateur/{id}")
     public void deleteUtilisateur(@PathVariable String id) {
-        utilisateurRepository.deleteById(id);
+        Utilisateur user = utilisateurRepository.findById(id).orElseThrow();
+        historiqueRepository.deleteAllByUtilisateur(user);
+        tokenRepository.deleteAllByUser(user);
+
+        utilisateurRepository.deleteUtilisateurById(user.getId());
     }
 
 
+    @Transactional
     @PostMapping("/auth/login")
     public AuthenticationResponse login (@RequestBody Utilisateur utilisateur , HttpServletRequest request){
 
@@ -116,6 +133,8 @@ public class UtilisateurController {
 
             // Retrieve the user from repository
             Utilisateur user = utilisateurRepository.findByUsername(utilisateur.getUsername()).orElseThrow();
+
+            tokenRepository.deleteAllByUserId(user.getId());
 
             // Generate JWT token
             String jwt = jwtService.generateToken(user);
@@ -143,8 +162,16 @@ public class UtilisateurController {
     @GetMapping("/auth/validate-token")
     public ResponseEntity<Integer> validateToken(@RequestParam("token") String token) {
         boolean t = tokenRepository.existsByToken(token);
+
+
         if(t) {
-            return ResponseEntity.ok(0);
+            Token tok = tokenRepository.findByToken(token).orElseThrow();
+            if(!tok.isLoggedOut()){
+                return ResponseEntity.ok(0);
+            }
+            else {
+                return ResponseEntity.ok(1);
+            }
         }
         else {
             return ResponseEntity.ok(1);

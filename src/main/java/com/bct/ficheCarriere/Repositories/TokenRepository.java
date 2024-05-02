@@ -1,7 +1,9 @@
 package com.bct.ficheCarriere.Repositories;
 
 import com.bct.ficheCarriere.ModelPFE.Token;
+import com.bct.ficheCarriere.ModelPFE.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -19,4 +21,12 @@ where t.user.Id = :userId and t.loggedOut = false
     Optional<Token> findByToken(String token);
 
     boolean existsByToken(String token);
+
+
+ // This annotation is required for delete queries
+
+    void deleteAllByUserId(Long userId);
+
+    void deleteAllByUser(Utilisateur user);
+
 }

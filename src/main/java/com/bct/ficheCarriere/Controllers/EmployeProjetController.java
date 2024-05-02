@@ -3,6 +3,8 @@ package com.bct.ficheCarriere.Controllers;
 import com.bct.ficheCarriere.ModelPFE.Employe;
 import com.bct.ficheCarriere.ModelPFE.EmployeProjet;
 import com.bct.ficheCarriere.ModelPFE.Projet;
+import com.bct.ficheCarriere.ModelPFE.dto.EmployeProjetDTO;
+import com.bct.ficheCarriere.Repositories.EmployeProjetRepository;
 import com.bct.ficheCarriere.Repositories.EmployeRepository;
 import com.bct.ficheCarriere.Repositories.ProjetRepository;
 import com.bct.ficheCarriere.service.EmployeProjetService;
@@ -10,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/EmployeProjet")
@@ -18,6 +22,9 @@ public class EmployeProjetController {
 
     @Autowired
     private EmployeProjetService employeProjetService;
+
+    @Autowired
+    private EmployeProjetRepository employeProjetRepository;
 
     @Autowired
     private EmployeRepository employeRepository;
@@ -39,6 +46,28 @@ public class EmployeProjetController {
         employeProjetService.deleteEmployeProjet(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping("/dto/{id}")
+    public ResponseEntity<List<EmployeProjetDTO>> getById(@PathVariable Long id) {
+        Employe emp = employeRepository.findById(id).orElseThrow();
+        List<EmployeProjet> L_empProjet = employeProjetRepository.findAllByEmploye(emp);
+
+        List<EmployeProjetDTO> dtos = L_empProjet.stream().map(empProjet -> {
+            Projet projet = projetRepository.findById(empProjet.getProjet().getId()).orElseThrow();
+
+            EmployeProjetDTO dto = new EmployeProjetDTO();
+            dto.setId(empProjet.getId());
+            dto.setNom(projet.getNom());
+            dto.setDate(projet.getDate());
+            dto.setRoleProjet(empProjet.getRoleProjet());
+            dto.setDescription(projet.getDescription());
+            return dto;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
+
 
 
 

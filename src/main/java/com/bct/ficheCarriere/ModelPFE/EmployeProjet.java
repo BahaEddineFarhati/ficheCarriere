@@ -17,6 +17,7 @@ public class EmployeProjet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String RoleProjet;
 
     @JsonIgnore
     @ManyToOne

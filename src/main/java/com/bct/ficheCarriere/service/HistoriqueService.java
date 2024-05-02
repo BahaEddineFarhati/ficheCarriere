@@ -48,6 +48,11 @@ public class HistoriqueService {
         public void deleteHistoriqueById(Long id) {
             historiqueRepository.deleteById(id);
         }
+
+    public void deleteAllHistoriques() {
+        historiqueRepository.deleteAll();
+    }
+
     }
 
     
