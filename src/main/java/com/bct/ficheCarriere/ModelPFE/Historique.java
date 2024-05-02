@@ -18,7 +18,7 @@ public class Historique {
     private String adresseIp ;
 
 
- @ManyToOne(cascade = CascadeType.ALL)
+ @ManyToOne
     @JoinColumn(name = "idUtilisateur", nullable = false)
     private Utilisateur utilisateur;
 }
