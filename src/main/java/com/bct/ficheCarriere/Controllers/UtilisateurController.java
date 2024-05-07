@@ -5,14 +5,12 @@ import com.bct.ficheCarriere.Repositories.*;
 import com.bct.ficheCarriere.security.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,9 +40,13 @@ public class UtilisateurController {
 
     private final RoleRepository roleRepository;
 
+    private final EmployeRepository employeRepository ;
+
+
+    private CustomUtilisateurRepository customUtilisateurRepository;
 
     @Autowired
-    public UtilisateurController(UtilisateurRepository utilisateurRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, TokenRepository tokenRepository, HistoriqueRepository historiqueRepository , RoleRepository roleRepository) {
+    public UtilisateurController(UtilisateurRepository utilisateurRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, TokenRepository tokenRepository, HistoriqueRepository historiqueRepository , RoleRepository roleRepository , EmployeRepository employeRepository , CustomUtilisateurRepository customUtilisateurRepository) {
         this.utilisateurRepository = utilisateurRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -52,14 +54,15 @@ public class UtilisateurController {
         this.tokenRepository = tokenRepository;
         this.historiqueRepository = historiqueRepository;
         this.roleRepository = roleRepository;
+        this.employeRepository = employeRepository;
+        this.customUtilisateurRepository = customUtilisateurRepository ;
     }
 
     @PostMapping("/admin/addUtilisateur")
     public ResponseEntity<String> addUtilisateur(@RequestBody Utilisateur utilisateur) {
         String encodedPassword = passwordEncoder.encode(utilisateur.getPassword());
         utilisateur.setPassword(encodedPassword);
-        utilisateurRepository.save(utilisateur);
-
+        customUtilisateurRepository.executeCustomInsertQuery(encodedPassword,utilisateur.getUsername(),utilisateur.getId(),utilisateur.getRole().getId());
         return ResponseEntity.status(HttpStatus.CREATED).body("User registration was successful");
     }
 
@@ -116,12 +119,12 @@ public class UtilisateurController {
 
     @Transactional
     @DeleteMapping("admin/deleteUtilisateur/{id}")
-    public void deleteUtilisateur(@PathVariable String id) {
+    public ResponseEntity<String> deleteUtilisateur(@PathVariable String id) {
         Utilisateur user = utilisateurRepository.findById(id).orElseThrow();
         historiqueRepository.deleteAllByUtilisateur(user);
         tokenRepository.deleteAllByUser(user);
-
-        utilisateurRepository.deleteUtilisateurById(user.getId());
+        customUtilisateurRepository.executeCustomDeleteQuery(id);
+        return ResponseEntity.ok("User has been deleted");
     }
 
 
